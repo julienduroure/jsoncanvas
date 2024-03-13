@@ -1,3 +1,6 @@
+use serde::Serialize;
+use serde::ser::{SerializeStruct, Serializer};
+
 pub struct Edge {
     pub id: String,
     from_node: String,
@@ -77,4 +80,80 @@ pub enum Side {
 pub enum End {
     None,
     Arrow
+}
+
+impl Serialize for Side {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+        {
+            match self {
+                Side::Top => serializer.serialize_str("top"),
+                Side::Left => serializer.serialize_str("left"),
+                Side::Right => serializer.serialize_str("right"),
+                Side::Bottom => serializer.serialize_str("bottom"),
+            }
+        }
+
+}
+
+impl Serialize for End {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+        {
+            match self {
+                End::None => serializer.serialize_str("none"),
+                End::Arrow => serializer.serialize_str("arrow"),
+            }
+        }
+
+}
+
+impl Serialize for Edge {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+        {
+            let mut nb = 3;
+
+            if self.color.is_some() { nb += 1; }
+            if self.label.is_some() { nb += 1; }
+            if self.from_side.is_some() { nb += 1; }
+            if self.from_end.is_some() { nb += 1; }
+            if self.to_side.is_some() { nb += 1; }
+            if self.to_end.is_some() { nb += 1; }
+
+            let mut state = serializer.serialize_struct("Edge", nb)?;
+            state.serialize_field("id", &self.id)?;
+            state.serialize_field("fromNode", &self.from_node)?;
+            state.serialize_field("toNode", &self.to_node)?;
+
+            if self.color.is_some() {
+                state.serialize_field("color", &self.color)?;
+            }
+
+            if self.label.is_some() {
+                state.serialize_field("label", &self.label)?;
+            }
+
+            if self.from_side.is_some() {
+                state.serialize_field("fromSide", &self.from_side.as_ref().unwrap())?;
+            }
+
+            if self.from_end.is_some() {
+                state.serialize_field("fromEnd", &self.from_end.as_ref().unwrap())?;
+            }
+
+            if self.to_side.is_some() {
+                state.serialize_field("toSide", &self.to_side.as_ref().unwrap())?;
+            }
+
+            if self.to_end.is_some() {
+                state.serialize_field("toEnd", &self.to_end.as_ref().unwrap())?;
+            }
+
+
+            state.end()
+        }
 }
