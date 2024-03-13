@@ -1,5 +1,8 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde::ser::{SerializeStruct, Serializer};
+use serde::de::{Visitor, Deserializer, MapAccess};
+
+use std::fmt;
 
 #[derive(Debug)]
 pub struct Node {
@@ -154,7 +157,7 @@ impl TextNode {
 
 }
 
-#[derive(Debug)]
+#[derive(Debug, Deserialize)]
 pub struct FileNode {
     file: String,
     subpath: Option<String>,
@@ -239,12 +242,12 @@ impl Serialize for BackGround {
         {
             if self.background_style.is_some() {
                 let mut state = serializer.serialize_struct("BackGround", 2)?;
-                state.serialize_field("image", &self.image)?;
+                state.serialize_field("background", &self.image)?;
                 state.serialize_field("backgroundStyle", &self.background_style)?;
                 state.end()
             } else {
                 let mut state = serializer.serialize_struct("BackGround", 1)?;
-                state.serialize_field("image", &self.image)?;
+                state.serialize_field("background", &self.image)?;
                 state.end()
             }
         }
@@ -257,11 +260,11 @@ impl BackGround {
     {
         match &self.background_style {
             Some(_style) => {
-                state.serialize_field("image", &self.image)?;
+                state.serialize_field("background", &self.image)?;
                 state.serialize_field("backgroundStyle", &self.background_style)?;
             },
             None => {
-                state.serialize_field("image", &self.image)?;
+                state.serialize_field("background", &self.image)?;
             }
         }
         Ok(())
@@ -367,7 +370,7 @@ impl NodeType {
                     state.serialize_field("label", &group.label)?;
                 }
                 if group.background.is_some() {
-                    state.serialize_field("image", &group.background.as_ref().unwrap().image)?;
+                    state.serialize_field("background", &group.background.as_ref().unwrap().image)?;
                 }
                 if group.background.is_some() && group.background.as_ref().unwrap().background_style.is_some() {
                     state.serialize_field("backgroundStyle", &group.background.as_ref().unwrap().background_style.as_ref().unwrap())?;
@@ -402,3 +405,171 @@ impl Serialize for Node {
         }
 }
 
+impl<'de> Deserialize<'de> for Node {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct NodeVisitor;
+
+        impl<'de> Visitor<'de> for NodeVisitor {
+            type Value = Node;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+                formatter.write_str("struct Node")
+            }
+
+            fn visit_map<V>(self, mut map: V) -> Result<Node, V::Error>
+            where
+                V: MapAccess<'de>,
+            {
+                let mut node_type: Option<NodeType> = None;
+                let mut id: Option<String> = None;
+                let mut x: Option<i32> = None;
+                let mut y: Option<i32> = None;
+                let mut width: Option<i32> = None;
+                let mut height: Option<i32> = None;
+                let mut color: Option<crate::color::Color> = None;
+
+                let mut text: Option<String> = None;
+                let mut file: Option<String> = None;
+                let mut subpath: Option<String> = None;
+                let mut url: Option<String> = None;
+                let mut label: Option<String> = None;
+                let mut background: Option<String> = None;
+                let mut style: Option<String> = None;
+
+                enum Type {
+                    Text,
+                    File,
+                    Link,
+                    Group,
+                }
+
+                let mut type_node: Option<Type> = None;
+
+
+                while let Some(key) = map.next_key()? {
+                    match key {
+                        "type" => {
+                            let type_value: String = map.next_value()?;
+                            match type_value.as_str() {
+                                "text" => {
+                                    type_node = Some(Type::Text);
+                                }
+                                "file" => {
+                                    type_node = Some(Type::File);
+                                }
+                                "link" => {
+                                    type_node = Some(Type::Link);
+                                }
+                                "group" => {
+                                    type_node = Some(Type::Group);
+                                }
+                                _ => return Err(serde::de::Error::custom("invalid type")),
+                            }
+                        },
+                        "id" => {
+                            id = Some(map.next_value()?);
+                        },
+                        "x" => {
+                            x = Some(map.next_value()?);
+                        },
+                        "y" => {
+                            y = Some(map.next_value()?);
+                        },
+                        "width" => {
+                            width = Some(map.next_value()?);
+                        },
+                        "height" => {
+                            height = Some(map.next_value()?);
+                        },
+                        "color" => {
+                            color = Some(map.next_value()?);
+                        },
+                        "text" => {
+                            text = Some(map.next_value()?);
+                        },
+                        "file" => {
+                            file = Some(map.next_value()?);
+                        },
+                        "subpath" => {
+                            subpath = Some(map.next_value()?);
+                        },
+                        "url" => {
+                            url = Some(map.next_value()?);
+                        },
+                        "label" => {
+                            label = Some(map.next_value()?);
+                        },
+                        "background" => {
+                            background =  Some(map.next_value()?);
+                        },
+                        "backgroundStyle" => {
+                            style = Some(map.next_value()?);
+                        },
+                        _ => return Err(serde::de::Error::custom("invalid key")),
+                    }
+                }
+
+                let id = id.ok_or_else(|| serde::de::Error::missing_field("id"))?;
+                let x = x.ok_or_else(|| serde::de::Error::missing_field("x"))?;
+                let y = y.ok_or_else(|| serde::de::Error::missing_field("y"))?;
+                let width = width.ok_or_else(|| serde::de::Error::missing_field("width"))?;
+                let height = height.ok_or_else(|| serde::de::Error::missing_field("height"))?;
+
+                match type_node {
+                    Some(Type::Text) => {
+                        let text = text.ok_or_else(|| serde::de::Error::missing_field("text"))?;
+                        node_type = Some(NodeType::Text(TextNode::new(text)));
+                    },
+                    Some(Type::File) => {
+                        let file = file.ok_or_else(|| serde::de::Error::missing_field("file"))?;
+                        node_type = Some(NodeType::File(FileNode::new(file, subpath)));
+                    },
+                    Some(Type::Link) => {
+                        let url = url.ok_or_else(|| serde::de::Error::missing_field("url"))?;
+                        node_type = Some(NodeType::Link(LinkNode::new(url)));
+                    },
+                    Some(Type::Group) => {
+                        if background.is_some() && style.is_some() {
+                            match style.unwrap().as_str() {
+                                "cover" => {
+                                    node_type = Some(NodeType::Group(GroupNode::new(label, Some(BackGround::new(background.unwrap(), Some(BackgroundStyle::Cover))))));
+                                },
+                                "ratio" => {
+                                    node_type = Some(NodeType::Group(GroupNode::new(label, Some(BackGround::new(background.unwrap(), Some(BackgroundStyle::Ratio))))));
+                                },
+                                "repeat" => {
+                                    node_type = Some(NodeType::Group(GroupNode::new(label, Some(BackGround::new(background.unwrap(), Some(BackgroundStyle::Repeat))))));
+                                },
+                                _ => return Err(serde::de::Error::custom("invalid background style")),
+                            }
+                        } else if background.is_some() && !style.is_some() {
+                            node_type = Some(NodeType::Group(GroupNode::new(label, Some(BackGround::new(background.unwrap(), None)))));
+                        } else if label.is_some() {
+                            node_type = Some(NodeType::Group(GroupNode::new(label, None)));
+                        } else {
+                            node_type = Some(NodeType::Group(GroupNode::new(None, None)));
+                        }
+                    },
+                    _ => {
+                        return Err(serde::de::Error::custom("invalid type"));
+                    }
+                }
+
+                Ok(Node {
+                    id,
+                    x,
+                    y,
+                    width,
+                    height,
+                    color,
+                    node_type: node_type.unwrap(),
+                })
+            }
+        }
+
+        deserializer.deserialize_map(NodeVisitor)
+    }
+}

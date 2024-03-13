@@ -18,8 +18,10 @@ fn main() {
 
     // Text Node
 
+    let node_type_text = NodeType::Text(TextNode::new("Test".to_string()));
+
     let mut node1 = Node::new("id".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)));
-    node1.set(NodeType::Text(TextNode::new("Test".to_string())));
+    node1.set(node_type_text);
 
     // File Node
     let mut node2: Node = Node::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)));
@@ -96,7 +98,14 @@ fn main() {
 
     ///////////////////////////// Deserialization /////////////////////////////
 
-    // let jsoncanvas_deserialized: jsoncanvas::jsoncanvas::JsonCanvas = serde_json::from_str(&serialized_canvas).unwrap();
+    // let deserialized_node1: Node = serde_json::from_str(&serialized_node1).unwrap();
+    // println!("deserialized node 1= {:?}", deserialized_node1);
+
+    // let deseralied_edge1: Edge = serde_json::from_str(&serialized_edge1).unwrap();
+    // println!("deserialized edge 1= {:?}", deseralied_edge1);
+
+    let jsoncanvas_deserialized: jsoncanvas::jsoncanvas::JsonCanvas = serde_json::from_str(&serialized_canvas).unwrap();
+    println!("deserialized canvas = {:?}", jsoncanvas_deserialized);
 
 }
 

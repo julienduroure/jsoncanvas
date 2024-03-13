@@ -1,6 +1,9 @@
 use serde::Serialize;
 use serde::ser::{SerializeStruct, Serializer};
+use serde::de::{self, Deserialize, Deserializer, Visitor, MapAccess};
+use std::fmt;
 
+#[derive(Debug)]
 pub struct Edge {
     pub id: String,
     from_node: String,
@@ -70,6 +73,7 @@ impl Edge {
 
 }
 
+#[derive(Debug)]
 pub enum Side {
     Top,
     Left,
@@ -77,6 +81,7 @@ pub enum Side {
     Bottom,
 }
 
+#[derive(Debug)]
 pub enum End {
     None,
     Arrow
@@ -156,4 +161,156 @@ impl Serialize for Edge {
 
             state.end()
         }
+}
+
+
+impl<'de> Deserialize<'de> for Side {
+    fn deserialize<D>(deserializer: D) -> Result<Side, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct SideVisitor;
+
+        impl<'de> Visitor<'de> for SideVisitor {
+            type Value = Side;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+                formatter.write_str("a string representing a side")
+            }
+
+            fn visit_str<E>(self, value: &str) -> Result<Side, E>
+            where
+                E: de::Error,
+            {
+                match value {
+                    "top" => Ok(Side::Top),
+                    "left" => Ok(Side::Left),
+                    "right" => Ok(Side::Right),
+                    "bottom" => Ok(Side::Bottom),
+                    _ => Err(E::custom(format!("unknown side: {}", value))),
+                }
+            }
+        }
+
+        deserializer.deserialize_str(SideVisitor)
+    }
+}
+
+impl <'de> Deserialize<'de> for End {
+    fn deserialize<D>(deserializer: D) -> Result<End, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct EndVisitor;
+
+        impl<'de> Visitor<'de> for EndVisitor {
+            type Value = End;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+                formatter.write_str("a string representing an end")
+            }
+
+            fn visit_str<E>(self, value: &str) -> Result<End, E>
+            where
+                E: de::Error,
+            {
+                match value {
+                    "none" => Ok(End::None),
+                    "arrow" => Ok(End::Arrow),
+                    _ => Err(E::custom(format!("unknown end: {}", value))),
+                }
+            }
+        }
+
+        deserializer.deserialize_str(EndVisitor)
+    }
+}
+
+impl<'de> Deserialize<'de> for Edge {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct EdgeVisitor;
+
+        impl<'de> Visitor<'de> for EdgeVisitor {
+            type Value = Edge;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+                formatter.write_str("struct Edge")
+            }
+
+            fn visit_map<V>(self, mut map: V) -> Result<Edge, V::Error>
+            where
+                V: MapAccess<'de>,
+            {
+                let mut id: Option<String> = None;
+                let mut from_node: Option<String> = None;
+                let mut from_side: Option<Side> = None;
+                let mut from_end: Option<End> = None;
+                let mut to_node: Option<String> = None;
+                let mut to_side: Option<Side> = None;
+                let mut to_end: Option<End> = None;
+                let mut color: Option<crate::color::Color> = None;
+                let mut label: Option<String> = None;
+
+                while let Some(key) = map.next_key()? {
+                    match key {
+                        "id" => {
+                            id = Some(map.next_value()?);
+                        },
+                        "fromNode" => {
+                            from_node = Some(map.next_value()?);
+                        },
+                        "toNode" => {
+                            to_node = Some(map.next_value()?);
+                        },
+                        "fromSide" => {
+                            from_side = Some(map.next_value()?);
+                        },
+                        "fromEnd" => {
+                            from_end = Some(map.next_value()?);
+                        },
+                        "toSide" => {
+                            to_side = Some(map.next_value()?);
+                        },
+                        "toEnd" => {
+                            to_end = Some(map.next_value()?);
+                        },
+                        "color" => {
+                            color = Some(map.next_value()?);
+                        },
+                        "label" => {
+                            label = Some(map.next_value()?);
+                        },
+                        _ => {
+                            return Err(serde::de::Error::custom("invalid key"));
+                        },
+                    }
+                }
+
+                let id = id.ok_or_else(|| serde::de::Error::missing_field("id"))?;
+                let from_node = from_node.ok_or_else(|| serde::de::Error::missing_field("fromNode"))?;
+                let to_node = to_node.ok_or_else(|| serde::de::Error::missing_field("toNode"))?;
+
+                Ok(Edge {
+                    id,
+                    from_node,
+                    from_side,
+                    from_end,
+                    to_node,
+                    to_side,
+                    to_end,
+                    color,
+                    label,
+                })
+
+            }
+
+        }
+
+        deserializer.deserialize_map(EdgeVisitor)
+
+
+    }
 }
