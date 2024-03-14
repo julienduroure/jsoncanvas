@@ -1,4 +1,4 @@
-use jsoncanvas::{color::{Color, PresetColor}, node::{FileNode, GroupNode, LinkNode, Node, NodeType, TextNode, BackGround, BackgroundStyle}};
+use jsoncanvas::{color::{Color, PresetColor}, jsoncanvas::JsonCanvas, node::{BackGround, BackgroundStyle, FileNode, GroupNode, LinkNode, Node, NodeType, TextNode}};
 use jsoncanvas::edge::{Edge, End, Side};
 use serde_json;
 
@@ -91,7 +91,7 @@ fn main() {
     canvas.add_edge(edge1).unwrap();
     canvas.add_edge(edge2).unwrap();
 
-    let serialized_canvas = serde_json::to_string(&canvas).unwrap();
+    let serialized_canvas = canvas.to_string();
 
     println!("serialized canvas = {}", serialized_canvas);
 
@@ -104,7 +104,7 @@ fn main() {
     // let deseralied_edge1: Edge = serde_json::from_str(&serialized_edge1).unwrap();
     // println!("deserialized edge 1= {:?}", deseralied_edge1);
 
-    let jsoncanvas_deserialized: jsoncanvas::jsoncanvas::JsonCanvas = serde_json::from_str(&serialized_canvas).unwrap();
+    let jsoncanvas_deserialized: jsoncanvas::jsoncanvas::JsonCanvas = JsonCanvas::from_string(serialized_canvas);
     println!("deserialized canvas = {:?}", jsoncanvas_deserialized);
 
 }

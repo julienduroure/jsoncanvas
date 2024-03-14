@@ -70,7 +70,7 @@ mod test {
         canvas.add_edge(edge1).unwrap();
         canvas.add_edge(edge2).unwrap();
 
-        let serialized_canvas = serde_json::to_string(&canvas).unwrap();
+        let serialized_canvas = canvas.to_string();
 
         println!("serialized canvas = {}", serialized_canvas);
 
@@ -83,7 +83,7 @@ mod test {
         // let deseralied_edge1: Edge = serde_json::from_str(&serialized_edge1).unwrap();
         // println!("deserialized edge 1= {:?}", deseralied_edge1);
 
-        let _jsoncanvas_deserialized: JsonCanvas = serde_json::from_str(&serialized_canvas).unwrap();
+        let _jsoncanvas_deserialized: JsonCanvas = JsonCanvas::from_string(serialized_canvas);
 
     }
 }

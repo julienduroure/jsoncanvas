@@ -49,6 +49,14 @@ impl JsonCanvas {
     pub fn get_node(&mut self, id: String) -> Option<&mut Node> {
         self.nodes.get_mut(&id)
     }
+
+    pub fn to_string(&self) -> String {
+        serde_json::to_string(self).unwrap()
+    }
+
+    pub fn from_string(s: String) -> JsonCanvas {
+        serde_json::from_str(&s).unwrap()
+    }
 }
 
 

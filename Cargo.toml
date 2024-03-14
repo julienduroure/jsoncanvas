@@ -10,9 +10,5 @@ serde = { version = "1.0.197", features = ["derive"] }
 serde_json = "1.0.114"
 
 [[bin]]
-name = "main"
-path = "bin/main.rs"
-
-[[bin]]
 name = "serial"
 path = "bin/serial.rs"
