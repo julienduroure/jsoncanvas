@@ -2,6 +2,7 @@
 //! # jsoncanvas
 //!
 //! `jsoncanvas` is a library for creating and manipulating JSON objects representing a canvas.
+//!
 //! Specification source: <https://jsoncanvas.org/>
 //!
 //! ## Example
