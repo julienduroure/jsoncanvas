@@ -15,6 +15,11 @@ pub enum JsonCanvasError {
     AlreadyExists,
 }
 
+
+/// JsonCanvas
+///
+/// Main struct for the canvas
+///
 #[derive(Debug)]
 pub struct JsonCanvas {
     nodes: HashMap<String, Node>,
@@ -50,10 +55,16 @@ impl JsonCanvas {
         self.nodes.get_mut(&id)
     }
 
+    pub fn get_edge(&mut self, id: String) -> Option<&mut Edge> {
+        self.edges.get_mut(&id)
+    }
+
+    /// Serialize the JsonCanvas to a string
     pub fn to_string(&self) -> String {
         serde_json::to_string(self).unwrap()
     }
 
+    /// Deserialize the JsonCanvas from a string
     pub fn from_string(s: String) -> JsonCanvas {
         serde_json::from_str(&s).unwrap()
     }
