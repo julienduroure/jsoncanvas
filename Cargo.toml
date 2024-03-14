@@ -5,6 +5,7 @@ authors = ["Julien Duroure <julien.duroure@gmail.com>"]
 license = "MIT"
 edition = "2021"
 description = "Library for creating and manipulating jsoncanvas data"
+repository = "https://github.com/julienduroure/jsoncanvas"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
