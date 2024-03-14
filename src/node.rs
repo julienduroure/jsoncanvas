@@ -423,7 +423,7 @@ impl<'de> Deserialize<'de> for Node {
             where
                 V: MapAccess<'de>,
             {
-                let mut node_type: Option<NodeType> = None;
+                let node_type: Option<NodeType>;
                 let mut id: Option<String> = None;
                 let mut x: Option<i32> = None;
                 let mut y: Option<i32> = None;
