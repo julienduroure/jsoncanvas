@@ -13,6 +13,7 @@ repository = "https://github.com/julienduroure/jsoncanvas"
 serde = { version = "1.0.197", features = ["derive"] }
 serde_json = "1.0.114"
 url = { version = "2.5.0", features = ["serde"]}
+hex_color = { version = "3.0.0", features = ["serde"] }
 
 [[bin]]
 name = "serial"

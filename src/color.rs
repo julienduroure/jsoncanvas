@@ -1,6 +1,7 @@
 use serde::{Serialize, Serializer};
 use serde::de::{self, Visitor, Deserialize, Deserializer};
 use std::fmt;
+pub use hex_color::HexColor;
 
 #[derive(Debug)]
 pub enum PresetColor {
@@ -65,7 +66,7 @@ impl<'de> Deserialize<'de> for PresetColor {
 #[derive(Debug)]
 pub enum Color {
     Preset(PresetColor),
-    Color(String),
+    Color(HexColor),
 }
 
 impl Serialize for Color {
@@ -75,7 +76,7 @@ impl Serialize for Color {
     {
         match self {
             Color::Preset(color) => color.serialize(serializer),
-            Color::Color(color) => serializer.serialize_str(color),
+            Color::Color(color) => color.serialize(serializer),
         }
     }
 }
@@ -93,11 +94,7 @@ impl<'de> Deserialize<'de> for Color {
             "cyan" => Ok(Color::Preset(PresetColor::Cyan)),
             "purple" => Ok(Color::Preset(PresetColor::Purple)),
             _ => {
-                if value.starts_with("#") {
-                    Ok(Color::Color(value))
-                } else {
-                    Err(de::Error::custom(format!("unknown color: {}", value)))
-                }
+                Ok(Color::Color(HexColor::parse(&value).unwrap()))
             },
         }
     }

@@ -2,6 +2,7 @@ use jsoncanvas::{color::{Color, PresetColor}, jsoncanvas::JsonCanvas, node::{Bac
 use jsoncanvas::edge::{Edge, End, Side};
 use serde_json;
 use url::Url;
+use hex_color::HexColor;
 
 fn main() {
 
@@ -9,7 +10,7 @@ fn main() {
 
     // Color
     let color1 = Color::Preset(PresetColor::Red);
-    let color2 = Color::Color("#ff0000".to_string());
+    let color2 = Color::Color(HexColor::parse("#ff0000").unwrap());
 
     let serialized_color1 = serde_json::to_string(&color1).unwrap();
     let serialized_color2 = serde_json::to_string(&color2).unwrap();

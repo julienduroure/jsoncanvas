@@ -24,11 +24,12 @@
 //! use jsoncanvas::color::{Color, PresetColor};
 //! use jsoncanvas::node::{Node, NodeType, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
 //! use jsoncanvas::edge::{Edge, End, Side};
+//! use hex_color::HexColor;
 //!
 //!
 //!     // Color
 //! let color1 = Color::Preset(PresetColor::Red);
-//! let color2 = Color::Color("#ff0000".to_string());
+//! let color2 = Color::Color(HexColor::parse("#ff0000").unwrap());
 //!
 //!
 //! // Text Node
@@ -117,6 +118,8 @@ pub use jsoncanvas::JsonCanvas;
 
 #[cfg(test)]
 mod test {
+    use hex_color::HexColor;
+
     #[test]
     fn test() {
 
@@ -128,7 +131,7 @@ mod test {
 
         // Color
         let color1 = Color::Preset(PresetColor::Red);
-        let color2 = Color::Color("#ff0000".to_string());
+        let color2 = Color::Color(HexColor::parse("#ff0000").unwrap());
 
         // Text Node
 
