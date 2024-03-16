@@ -1,6 +1,7 @@
 use jsoncanvas::{color::{Color, PresetColor}, jsoncanvas::JsonCanvas, node::{BackGround, BackgroundStyle, FileNode, GroupNode, LinkNode, Node, NodeType, TextNode}};
 use jsoncanvas::edge::{Edge, End, Side};
 use serde_json;
+use url::Url;
 
 fn main() {
 
@@ -32,7 +33,7 @@ fn main() {
 
     // Link Node
     let mut node4: Node = Node::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)));
-    node4.set(NodeType::Link(LinkNode::new("https://www.google.com".to_string())));
+    node4.set(NodeType::Link(LinkNode::new(Url::parse("https://julienduroure.com").unwrap())));
 
     // Group Node
     let mut node5: Node = Node::new("id5".to_string(), 0, 0, 100, 100, Some(color2));

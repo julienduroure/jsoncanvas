@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 use serde::ser::{SerializeStruct, Serializer};
 use serde::de::{Visitor, Deserializer, MapAccess};
 
+use url::Url;
+
 use std::fmt;
 
 #[derive(Debug)]
@@ -92,7 +94,7 @@ impl Node {
         }
     }
 
-    pub fn get_url(&self) -> Option<String> {
+    pub fn get_url(&self) -> Option<Url> {
         match &self.node_type {
             NodeType::Link(linknode) => Some(linknode.url.clone()),
             _ => None,
@@ -174,11 +176,11 @@ impl FileNode {
 
 #[derive(Debug)]
 pub struct LinkNode {
-    url: String,
+    url: Url,
 }
 
 impl LinkNode {
-    pub fn new(url: String) -> LinkNode {
+    pub fn new(url: Url) -> LinkNode {
         LinkNode {
             url,
         }
@@ -434,7 +436,7 @@ impl<'de> Deserialize<'de> for Node {
                 let mut text: Option<String> = None;
                 let mut file: Option<String> = None;
                 let mut subpath: Option<String> = None;
-                let mut url: Option<String> = None;
+                let mut url: Option<Url> = None;
                 let mut label: Option<String> = None;
                 let mut background: Option<String> = None;
                 let mut style: Option<String> = None;

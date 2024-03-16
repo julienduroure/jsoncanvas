@@ -18,6 +18,14 @@
 //! ## Complete example
 //!
 //! ```
+//!
+//! use jsoncanvas::jsoncanvas::JsonCanvas;
+//! use url::Url;
+//! use jsoncanvas::color::{Color, PresetColor};
+//! use jsoncanvas::node::{Node, NodeType, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
+//! use jsoncanvas::edge::{Edge, End, Side};
+//!
+//!
 //!     // Color
 //! let color1 = Color::Preset(PresetColor::Red);
 //! let color2 = Color::Color("#ff0000".to_string());
@@ -39,7 +47,7 @@
 //!
 //! // Link Node
 //! let mut node4: Node = Node::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)));
-//! node4.set(NodeType::Link(LinkNode::new("https://julienduroure.com".to_string())));
+//! node4.set(NodeType::Link(LinkNode::new(Url::parse("https://julienduroure.com").unwrap())));
 //!
 //! // Group Node
 //! let mut node5: Node = Node::new("id5".to_string(), 0, 0, 100, 100, Some(color2));
@@ -116,7 +124,7 @@ mod test {
         use super::node::{Node, NodeType, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
         use super::color::{Color, PresetColor};
         use super::edge::{Edge, End, Side};
-
+        use url::Url;
 
         // Color
         let color1 = Color::Preset(PresetColor::Red);
@@ -138,7 +146,7 @@ mod test {
 
         // Link Node
         let mut node4: Node = Node::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)));
-        node4.set(NodeType::Link(LinkNode::new("https://julienduroure.com".to_string())));
+        node4.set(NodeType::Link(LinkNode::new(Url::parse("https://julienduroure.com").unwrap())));
 
         // Group Node
         let mut node5: Node = Node::new("id5".to_string(), 0, 0, 100, 100, Some(color2));
