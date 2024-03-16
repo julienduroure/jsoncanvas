@@ -89,7 +89,7 @@
 //!
 //! ```
 //! use jsoncanvas::JsonCanvas;
-//! use jsoncanvas::node::{GenericNodeInfo, Node, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
+//! use jsoncanvas::node::{Node, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
 //! use jsoncanvas::color::{Color, PresetColor};
 //! use jsoncanvas::edge::{Edge, End, Side};
 //! ```
@@ -101,6 +101,7 @@ pub mod color;
 pub mod jsoncanvas;
 
 pub use jsoncanvas::JsonCanvas;
+pub use node::{TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
 
 
 #[cfg(test)]
