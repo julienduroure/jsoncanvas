@@ -1,10 +1,12 @@
 use serde::{Deserialize, Serialize};
+use ambassador::{delegatable_trait, Delegate};
 use url::Url;
+use crate::color::Color;
+
 
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Node {
+pub struct GenericNode {
     pub id: String,
     x: i32,
     y: i32,
@@ -12,197 +14,231 @@ pub struct Node {
     height: i32,
     #[serde(skip_serializing_if = "Option::is_none")]
     color: Option<crate::color::Color>,
-    #[serde(flatten)]
-    node_type: NodeType,
 }
 
-impl Node {
-    pub fn new(id: String, x: i32, y: i32, width: i32, height: i32, color: Option<crate::color::Color>) -> Node {
-        Node {
+impl GenericNode {
+    pub fn new(
+        id: String,
+        x: i32,
+        y: i32,
+        width: i32,
+        height: i32,
+        color: Option<Color>,
+    ) -> Self {
+        Self {
             id,
             x,
             y,
             width,
             height,
             color,
-            node_type: NodeType::None,
         }
     }
-
-    pub fn set_x(&mut self, x: i32) {
-        self.x = x;
-    }
-
-    pub fn set_y(&mut self, y: i32) {
-        self.y = y;
-    }
-
-    pub fn set_width(&mut self, width: i32) {
-        self.width = width;
-    }
-
-    pub fn set_height(&mut self, height: i32) {
-        self.height = height;
-    }
-
-    pub fn set_position(&mut self, x: i32, y: i32) {
-        self.x = x;
-        self.y = y;
-    }
-
-    pub fn set_size(&mut self, width: i32, height: i32) {
-        self.width = width;
-        self.height = height;
-    }
-
-    pub fn set_color(&mut self, color: crate::color::Color) {
-        self.color = Some(color);
-    }
-
-    pub fn remove_color(&mut self) {
-        self.color = None;
-    }
-
-    pub fn set(&mut self, data: NodeType) {
-        self.node_type = data;
-    }
-
-    pub fn get_text(&self) -> Option<String> {
-        match &self.node_type {
-            NodeType::Text(textnode) => Some(textnode.text.clone()),
-            _ => None,
-        }
-    }
-
-    pub fn get_file(&self) -> Option<String> {
-        match &self.node_type {
-            NodeType::File(filenode) => Some(filenode.file.clone()),
-            _ => None,
-        }
-    }
-
-    pub fn get_subpath(&self) -> Option<String> {
-        match &self.node_type {
-            NodeType::File(filenode) => {
-                match &filenode.subpath {
-                    Some(subpath) => Some(subpath.clone()),
-                    None => None,
-                }
-            }
-            _ => None,
-        }
-    }
-
-    pub fn get_url(&self) -> Option<Url> {
-        match &self.node_type {
-            NodeType::Link(linknode) => Some(linknode.url.clone()),
-            _ => None,
-        }
-    }
-
-    pub fn get_label(&self) -> Option<String> {
-        match &self.node_type {
-            NodeType::Group(groupnode) => {
-                match &groupnode.label {
-                    Some(label) => Some(label.clone()),
-                    None => None,
-                }
-
-            }
-            _ => None,
-        }
-    }
-
-    pub fn get_background_image(&self) -> Option<String> {
-        match &self.node_type {
-            NodeType::Group(groupnode) => {
-                match &groupnode.background {
-                    Some(background) => Some(background.image.clone()),
-                    None => None,
-                }
-            }
-            _ => None,
-        }
-    }
-
-    pub fn get_background_style(&self) -> Option<&BackgroundStyle> {
-        match &self.node_type {
-            NodeType::Group(groupnode) => {
-                match &groupnode.background {
-                    Some(background) => {
-                        match &background.background_style {
-                            Some(style) => Some(style),
-                            None => None,
-                        }
-                    }
-                    None => None,
-                }
-            }
-            _ => None,
-        }
-    }
-
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[delegatable_trait]
+pub trait GenericNodeInfo {
+    fn id(&self) -> &String;
+    fn get_x(self) -> i32;
+    fn get_y(self) -> i32;
+    fn get_width(self) -> i32;
+    fn get_height(self) -> i32;
+    fn color(&self) -> &Option<Color>;
+}
+
+impl GenericNodeInfo for GenericNode {
+    fn id(&self) -> &String {
+        &self.id
+    }
+
+    fn get_x(self) -> i32 {
+        self.x
+    }
+
+    fn get_y(self) -> i32 {
+        self.y
+    }
+
+    fn get_width(self) -> i32 {
+        self.width
+    }
+
+    fn get_height(self) -> i32 {
+        self.height
+    }
+
+    fn color(&self) -> &Option<Color> {
+        &self.color
+    }
+}
+
+#[derive(Debug, Delegate, Serialize, Deserialize)]
+#[delegate(GenericNodeInfo)]
+#[serde(tag = "type", rename_all = "camelCase")]
+pub enum Node {
+    Text(TextNode),
+    File(FileNode),
+    Link(LinkNode),
+    Group(GroupNode),
+}
+
+#[derive(Debug, Delegate, Serialize, Deserialize)]
+#[delegate(GenericNodeInfo, target = "generic")]
 pub struct TextNode {
+    #[serde(flatten)]
+    generic: GenericNode,
     text: String,
 }
 
 impl TextNode {
-    pub fn new(text: String) -> TextNode {
-        TextNode {
+    pub fn new(
+        id: String,
+        x: i32,
+        y: i32,
+        width: i32,
+        height: i32,
+        color: Option<Color>,
+        text: String,
+    ) -> Self {
+        Self {
+            generic: GenericNode::new(id, x, y, width, height, color),
             text,
         }
     }
 
+    pub fn text(&self) -> &str {
+        &self.text
+    }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+impl Into<Node> for TextNode {
+    fn into(self) -> Node {
+        Node::Text(self)
+    }
+}
+
+
+#[derive(Debug, Delegate, Serialize, Deserialize)]
+#[delegate(GenericNodeInfo, target = "generic")]
 pub struct FileNode {
+    #[serde(flatten)]
+    generic: GenericNode,
     file: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     subpath: Option<String>,
 }
 
 impl FileNode {
-    pub fn new(file: String, subpath: Option<String>) -> FileNode {
-        FileNode {
+    pub fn new(
+        id: String,
+        x: i32,
+        y: i32,
+        width: i32,
+        height: i32,
+        color: Option<Color>,
+        file: String,
+        subpath: Option<String>,
+    ) -> Self {
+        Self {
+            generic: GenericNode::new(id, x, y, width, height, color),
             file,
             subpath,
         }
     }
+
+    pub fn file(&self) -> &str {
+        &self.file
+    }
+
+    pub fn subpath(&self) -> Option<&String> {
+        self.subpath.as_ref()
+    }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+impl Into<Node> for FileNode {
+    fn into(self) -> Node {
+        Node::File(self)
+    }
+}
+
+#[derive(Debug, Delegate, Serialize, Deserialize)]
+#[delegate(GenericNodeInfo, target = "generic")]
 pub struct LinkNode {
+    #[serde(flatten)]
+    generic: GenericNode,
     url: Url,
 }
 
 impl LinkNode {
-    pub fn new(url: Url) -> LinkNode {
-        LinkNode {
+    pub fn new(
+        id: String,
+        x: i32,
+        y: i32,
+        width: i32,
+        height: i32,
+        color: Option<Color>,
+        url: Url,
+    ) -> Self {
+        Self {
+            generic: GenericNode::new(id, x, y, width, height, color),
             url,
         }
     }
+
+    pub fn url(&self) -> &Url {
+        &self.url
+    }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+impl Into<Node> for LinkNode {
+    fn into(self) -> Node {
+        Node::Link(self)
+    }
+}
+
+#[derive(Debug, Delegate, Serialize, Deserialize)]
+#[delegate(GenericNodeInfo, target = "generic")]
 pub struct GroupNode {
+    #[serde(flatten)]
+    generic: GenericNode,
     #[serde(skip_serializing_if = "Option::is_none")]
     label: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(flatten)]
-    background: Option<BackGround>
+    background: Option<BackGround>,
 }
 
 impl GroupNode {
-    pub fn new(label: Option<String>, background: Option<BackGround>) -> GroupNode {
-        GroupNode {
+    pub fn new(
+        id: String,
+        x: i32,
+        y: i32,
+        width: i32,
+        height: i32,
+        color: Option<Color>,
+        label: Option<String>,
+        background: Option<BackGround>,
+    ) -> Self {
+        Self {
+            generic: GenericNode::new(id, x, y, width, height, color),
             label,
             background,
         }
+    }
+
+    pub fn label(&self) -> Option<&String> {
+        self.label.as_ref()
+    }
+
+    pub fn background(&self) -> Option<&BackGround> {
+        self.background.as_ref()
+    }
+}
+
+
+impl Into<Node> for GroupNode {
+    fn into(self) -> Node {
+        Node::Group(self)
     }
 }
 
@@ -231,12 +267,4 @@ pub enum BackgroundStyle {
     Repeat,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum NodeType {
-    None,
-    Text(TextNode),
-    File(FileNode),
-    Link(LinkNode),
-    Group(GroupNode),
-}
+

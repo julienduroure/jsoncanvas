@@ -22,7 +22,7 @@
 //! use jsoncanvas::jsoncanvas::JsonCanvas;
 //! use url::Url;
 //! use jsoncanvas::color::{Color, PresetColor};
-//! use jsoncanvas::node::{Node, NodeType, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
+//! use jsoncanvas::node::{Node, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
 //! use jsoncanvas::edge::{Edge, End, Side};
 //! use hex_color::HexColor;
 //!
@@ -34,35 +34,22 @@
 //!
 //! // Text Node
 //!
-//! let node_type_text = NodeType::Text(TextNode::new("Test".to_string()));
 //!
-//! let mut node1 = Node::new("id".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)));
-//! node1.set(node_type_text);
+//!        // Text Node
+//!      let node1: Node = TextNode::new("id".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "This is a test".to_string()).into();
 //!
-//! // File Node
-//! let mut node2: Node = Node::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)));
-//! node2.set(NodeType::File(FileNode::new("dir/to/path/file.png".to_string(), None)));
+//!        // File Node
+//!        let node2: Node = FileNode::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "dir/to/path/file.png".to_string(), None).into();
+//!        let node3: Node = FileNode::new("id3".to_string(), 0, 0, 100, 100, Some(color1), "dir/to/path/file.png".to_string(), Some("#here".to_string())).into();
 //!
-//! let mut node3: Node = Node::new("id3".to_string(), 0, 0, 100, 100, Some(color1));
-//! node3.set(NodeType::File(FileNode::new("dir/to/path/file.png".to_string(), Some("#here".to_string()))));
+//!        // Link Node
+//!        let node4: Node = LinkNode::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), Url::parse("https://julienduroure.com").unwrap()).into();
 //!
-//! // Link Node
-//! let mut node4: Node = Node::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)));
-//! node4.set(NodeType::Link(LinkNode::new(Url::parse("https://julienduroure.com").unwrap())));
-//!
-//! // Group Node
-//! let mut node5: Node = Node::new("id5".to_string(), 0, 0, 100, 100, Some(color2));
-//! node5.set(NodeType::Group(GroupNode::new(Some("Label".to_string()), None)));
-//!
-//! let mut node6: Node = Node::new("id6".to_string(), 0, 0, 100, 100, None);
-//! node6.set(NodeType::Group(GroupNode::new(None, None)));
-//!
-//! let mut node7: Node = Node::new("id7".to_string(), 0, 0, 100, 100, None);
-//! node7.set(NodeType::Group(GroupNode::new(None, Some(BackGround::new("path/to/image.png".to_string(), None)))));
-//!
-//! let mut node8: Node = Node::new("id8".to_string(), 0, 0, 100, 100, None);
-//! node8.set(NodeType::Group(GroupNode::new(None, Some(BackGround::new("path/to/image.png".to_string(), Some(BackgroundStyle::Cover))))));
-//!
+//!        // Group Node
+//!        let node5: Node = GroupNode::new("id5".to_string(), 0, 0, 100, 100, Some(color2), Some("Label".to_string()), None).into();
+//!        let node6: Node = GroupNode::new("id6".to_string(), 0, 0, 100, 100, None, None, None).into();
+//!        let node7: Node = GroupNode::new("id7".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new("path/to/image.png".to_string(), None))).into();
+//!        let node8: Node = GroupNode::new("id8".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new("path/to/image.png".to_string(), Some(BackgroundStyle::Cover)))).into();
 //!
 //! // Edge
 //!
@@ -102,7 +89,7 @@
 //!
 //! ```
 //! use jsoncanvas::JsonCanvas;
-//! use jsoncanvas::node::{Node, NodeType, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
+//! use jsoncanvas::node::{GenericNodeInfo, Node, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
 //! use jsoncanvas::color::{Color, PresetColor};
 //! use jsoncanvas::edge::{Edge, End, Side};
 //! ```
@@ -124,7 +111,7 @@ mod test {
     fn test() {
 
         use super::jsoncanvas::JsonCanvas;
-        use super::node::{Node, NodeType, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
+        use super::node::{Node, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
         use super::color::{Color, PresetColor};
         use super::edge::{Edge, End, Side};
         use url::Url;
@@ -134,36 +121,20 @@ mod test {
         let color2 = Color::Color(HexColor::parse("#ff0000").unwrap());
 
         // Text Node
-
-        let node_type_text = NodeType::Text(TextNode::new("Test".to_string()));
-
-        let mut node1 = Node::new("id".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)));
-        node1.set(node_type_text);
+        let node1: Node = TextNode::new("id".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "This is a test".to_string()).into();
 
         // File Node
-        let mut node2: Node = Node::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)));
-        node2.set(NodeType::File(FileNode::new("dir/to/path/file.png".to_string(), None)));
-
-        let mut node3: Node = Node::new("id3".to_string(), 0, 0, 100, 100, Some(color1));
-        node3.set(NodeType::File(FileNode::new("dir/to/path/file.png".to_string(), Some("#here".to_string()))));
+        let node2: Node = FileNode::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "dir/to/path/file.png".to_string(), None).into();
+        let node3: Node = FileNode::new("id3".to_string(), 0, 0, 100, 100, Some(color1), "dir/to/path/file.png".to_string(), Some("#here".to_string())).into();
 
         // Link Node
-        let mut node4: Node = Node::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)));
-        node4.set(NodeType::Link(LinkNode::new(Url::parse("https://julienduroure.com").unwrap())));
+        let node4: Node = LinkNode::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), Url::parse("https://julienduroure.com").unwrap()).into();
 
         // Group Node
-        let mut node5: Node = Node::new("id5".to_string(), 0, 0, 100, 100, Some(color2));
-        node5.set(NodeType::Group(GroupNode::new(Some("Label".to_string()), None)));
-
-        let mut node6: Node = Node::new("id6".to_string(), 0, 0, 100, 100, None);
-        node6.set(NodeType::Group(GroupNode::new(None, None)));
-
-        let mut node7: Node = Node::new("id7".to_string(), 0, 0, 100, 100, None);
-        node7.set(NodeType::Group(GroupNode::new(None, Some(BackGround::new("path/to/image.png".to_string(), None)))));
-
-        let mut node8: Node = Node::new("id8".to_string(), 0, 0, 100, 100, None);
-        node8.set(NodeType::Group(GroupNode::new(None, Some(BackGround::new("path/to/image.png".to_string(), Some(BackgroundStyle::Cover))))));
-
+        let node5: Node = GroupNode::new("id5".to_string(), 0, 0, 100, 100, Some(color2), Some("Label".to_string()), None).into();
+        let node6: Node = GroupNode::new("id6".to_string(), 0, 0, 100, 100, None, None, None).into();
+        let node7: Node = GroupNode::new("id7".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new("path/to/image.png".to_string(), None))).into();
+        let node8: Node = GroupNode::new("id8".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new("path/to/image.png".to_string(), Some(BackgroundStyle::Cover)))).into();
 
         // Edge
 

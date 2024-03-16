@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use crate::node::GenericNodeInfo;
 use crate::node::Node;
 use crate::edge::Edge;
 
@@ -36,7 +37,7 @@ where
     D: Deserializer<'de>,
 {
     let vec: Vec<Node> = Vec::deserialize(deserializer)?;
-    let map: HashMap<String, Node> = vec.into_iter().map(|node| (node.id.clone(), node)).collect();
+    let map: HashMap<String, Node> = vec.into_iter().map(|node| (node.id().clone(), node)).collect();
     Ok(map)
 }
 
@@ -67,10 +68,10 @@ impl JsonCanvas {
     }
 
     pub fn add_node(&mut self, node: Node) -> Result<(), JsonCanvasError> {
-        if self.nodes.contains_key(&node.id) {
+        if self.nodes.contains_key(node.id()) {
             return Err(JsonCanvasError::AlreadyExists);
         }
-        self.nodes.insert(node.id.clone(), node);
+        self.nodes.insert(node.id().clone(), node);
         Ok(())
     }
 
