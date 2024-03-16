@@ -101,7 +101,7 @@ pub mod color;
 pub mod jsoncanvas;
 
 pub use jsoncanvas::JsonCanvas;
-pub use node::{TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
+pub use node::{Node, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
 
 
 #[cfg(test)]
