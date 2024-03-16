@@ -81,6 +81,11 @@ fn main() {
 
     // JSON Canvas
     let mut canvas = jsoncanvas::jsoncanvas::JsonCanvas::new();
+
+    let empty_canvas = canvas.to_string();
+    println!("empty canvas = {}", empty_canvas);
+    canvas = JsonCanvas::from_string(empty_canvas);
+
     canvas.add_node(node1).unwrap();
     canvas.add_node(node2).unwrap();
     canvas.add_node(node3).unwrap();
