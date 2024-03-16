@@ -66,8 +66,8 @@
 //!
 //! // Edge
 //!
-//! let edge1 = Edge::new("edge1".to_string(), "node1".to_string(), None, None, "node2".to_string(), Some(Side::Left), Some(End::Arrow), None, None);
-//! let edge2 = Edge::new("edge2".to_string(), "node3".to_string(), None, None, "node4".to_string(), Some(Side::Left), Some(End::Arrow), Some(Color::Preset(PresetColor::Cyan)), Some("edge label".to_string()));
+//! let edge1 = Edge::new("edge1".to_string(), "id".to_string(), None, None, "id2".to_string(), Some(Side::Left), Some(End::Arrow), None, None);
+//! let edge2 = Edge::new("edge2".to_string(), "id3".to_string(), None, None, "id4".to_string(), Some(Side::Left), Some(End::Arrow), Some(Color::Preset(PresetColor::Cyan)), Some("edge label".to_string()));
 //!
 //! let serialized_edge1 = serde_json::to_string(&edge1).unwrap();
 //! let serialized_edge2 = serde_json::to_string(&edge2).unwrap();
@@ -167,8 +167,8 @@ mod test {
 
         // Edge
 
-        let edge1 = Edge::new("edge1".to_string(), "node1".to_string(), None, None, "node2".to_string(), Some(Side::Left), Some(End::Arrow), None, None);
-        let edge2 = Edge::new("edge2".to_string(), "node3".to_string(), None, None, "node4".to_string(), Some(Side::Left), Some(End::Arrow), Some(Color::Preset(PresetColor::Cyan)), Some("edge label".to_string()));
+        let edge1 = Edge::new("edge1".to_string(), "id".to_string(), None, None, "id2".to_string(), Some(Side::Left), Some(End::Arrow), None, None);
+        let edge2 = Edge::new("edge2".to_string(), "id3".to_string(), None, None, "id4".to_string(), Some(Side::Left), Some(End::Arrow), Some(Color::Preset(PresetColor::Cyan)), Some("edge label".to_string()));
 
         // JSON Canvas
         let mut canvas = JsonCanvas::new();

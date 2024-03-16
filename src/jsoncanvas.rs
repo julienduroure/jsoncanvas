@@ -8,6 +8,7 @@ use serde::{Serialize, Serializer, Deserialize, Deserializer};
 #[derive(Debug)]
 pub enum JsonCanvasError {
     AlreadyExists,
+    NodeNotExists,
 }
 
 
@@ -77,6 +78,15 @@ impl JsonCanvas {
         if self.edges.contains_key(&edge.id) {
             return Err(JsonCanvasError::AlreadyExists);
         }
+
+        if !self.nodes.contains_key(&edge.from_node) {
+            return Err(JsonCanvasError::NodeNotExists);
+        }
+
+        if !self.nodes.contains_key(&edge.to_node) {
+            return Err(JsonCanvasError::NodeNotExists);
+        }
+
         self.edges.insert(edge.id.clone(), edge);
         Ok(())
     }

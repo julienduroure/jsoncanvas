@@ -4,12 +4,12 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "camelCase")]
 pub struct Edge {
     pub id: String,
-    from_node: String,
+    pub from_node: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     from_side: Option<Side>,
     #[serde(skip_serializing_if = "Option::is_none")]
     from_end: Option<End>,
-    to_node: String,
+    pub to_node: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     to_side: Option<Side>,
     #[serde(skip_serializing_if = "Option::is_none")]
