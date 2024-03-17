@@ -9,8 +9,9 @@
 //!
 //! ```
 //! use jsoncanvas::JsonCanvas;
+//! use std::str::FromStr;
 //! let s: String = "{\"nodes\":[{\"id\":\"id7\",\"x\":0,\"y\":0,\"width\":100,\"height\":100,\"background\":\"path/to/image.png\",\"type\":\"group\"},{\"id\":\"id5\",\"x\":0,\"y\":0,\"width\":100,\"height\":100,\"color\":\"#ff0000\",\"label\":\"Label\",\"type\":\"group\"},{\"id\":\"id2\",\"x\":0,\"y\":0,\"width\":100,\"height\":100,\"color\":\"red\",\"file\":\"dir/to/path/file.png\",\"type\":\"file\"},{\"id\":\"id4\",\"x\":0,\"y\":0,\"width\":100,\"height\":100,\"color\":\"red\",\"url\":\"https://www.google.com\",\"type\":\"link\"},{\"id\":\"id6\",\"x\":0,\"y\":0,\"width\":100,\"height\":100,\"type\":\"group\"},{\"id\":\"id3\",\"x\":0,\"y\":0,\"width\":100,\"height\":100,\"color\":\"red\",\"file\":\"dir/to/path/file.png\",\"subpath\":\"#here\",\"type\":\"file\"},{\"id\":\"id8\",\"x\":0,\"y\":0,\"width\":100,\"height\":100,\"background\":\"path/to/image.png\",\"backgroundStyle\":\"cover\",\"type\":\"group\"},{\"id\":\"id\",\"x\":0,\"y\":0,\"width\":100,\"height\":100,\"color\":\"red\",\"text\":\"Test\",\"type\":\"text\"}],\"edges\":[{\"id\":\"edge2\",\"fromNode\":\"node3\",\"toNode\":\"node4\",\"color\":\"cyan\",\"label\":\"edge label\",\"toSide\":\"left\",\"toEnd\":\"arrow\"},{\"id\":\"edge1\",\"fromNode\":\"node1\",\"toNode\":\"node2\",\"toSide\":\"left\",\"toEnd\":\"arrow\"}]}".to_string();
-//! let canvas = JsonCanvas::from_string(s);
+//! let canvas = JsonCanvas::from_str(&s).unwrap();
 //!
 //! let _s = canvas.to_string();
 //! ```
@@ -26,31 +27,28 @@
 //! use jsoncanvas::edge::{Edge, End, Side};
 //! use hex_color::HexColor;
 //! use std::path::PathBuf;
+//! use std::str::FromStr;
 //!
 //!
-//!     // Color
+//! // Color
 //! let color1 = Color::Preset(PresetColor::Red);
 //! let color2 = Color::Color(HexColor::parse("#ff0000").unwrap());
 //!
-//!
 //! // Text Node
+//! let node1: Node = TextNode::new("id".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "This is a test".to_string()).into();
 //!
+//! // File Node
+//! let node2: Node = FileNode::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), PathBuf::from("dir/to/path/file.png"), None).into();
+//! let node3: Node = FileNode::new("id3".to_string(), 0, 0, 100, 100, Some(color1), PathBuf::from("dir/to/path/file.png"), Some("#here".to_string())).into();
 //!
-//!        // Text Node
-//!      let node1: Node = TextNode::new("id".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "This is a test".to_string()).into();
+//! // Link Node
+//! let node4: Node = LinkNode::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), Url::parse("https://julienduroure.com").unwrap()).into();
 //!
-//!        // File Node
-//!        let node2: Node = FileNode::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), PathBuf::from("dir/to/path/file.png"), None).into();
-//!        let node3: Node = FileNode::new("id3".to_string(), 0, 0, 100, 100, Some(color1), PathBuf::from("dir/to/path/file.png"), Some("#here".to_string())).into();
-//!
-//!        // Link Node
-//!        let node4: Node = LinkNode::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), Url::parse("https://julienduroure.com").unwrap()).into();
-//!
-//!        // Group Node
-//!        let node5: Node = GroupNode::new("id5".to_string(), 0, 0, 100, 100, Some(color2), Some("Label".to_string()), None).into();
-//!        let node6: Node = GroupNode::new("id6".to_string(), 0, 0, 100, 100, None, None, None).into();
-//!        let node7: Node = GroupNode::new("id7".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new(PathBuf::from("path/to/image.png"), None))).into();
-//!        let node8: Node = GroupNode::new("id8".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new(PathBuf::from("path/to/image.png"), Some(BackgroundStyle::Cover)))).into();
+//! // Group Node
+//! let node5: Node = GroupNode::new("id5".to_string(), 0, 0, 100, 100, Some(color2), Some("Label".to_string()), None).into();
+//! let node6: Node = GroupNode::new("id6".to_string(), 0, 0, 100, 100, None, None, None).into();
+//! let node7: Node = GroupNode::new("id7".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new(PathBuf::from("path/to/image.png"), None))).into();
+//! let node8: Node = GroupNode::new("id8".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new(PathBuf::from("path/to/image.png"), Some(BackgroundStyle::Cover)))).into();
 //!
 //! // Edge
 //!
@@ -82,7 +80,7 @@
 //! println!("serialized canvas = {}", serialized_canvas);
 //!
 //!
-//! let jsoncanvas_deserialized: jsoncanvas::jsoncanvas::JsonCanvas = JsonCanvas::from_string(serialized_canvas);
+//! let jsoncanvas_deserialized: JsonCanvas = JsonCanvas::from_str(&serialized_canvas).unwrap();
 //! println!("deserialized canvas = {:?}", jsoncanvas_deserialized);
 //! ```
 //!
@@ -107,6 +105,7 @@ pub mod color;
 pub mod jsoncanvas;
 
 pub use jsoncanvas::JsonCanvas;
+pub use jsoncanvas::JsonCanvasError;
 pub use node::{Node, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
 
 
@@ -123,6 +122,7 @@ mod test {
         use super::edge::{Edge, End, Side};
         use url::Url;
         use std::path::PathBuf;
+        use std::str::FromStr;
 
         // Color
         let color1 = Color::Preset(PresetColor::Red);
@@ -176,7 +176,7 @@ mod test {
         // let deseralied_edge1: Edge = serde_json::from_str(&serialized_edge1).unwrap();
         // println!("deserialized edge 1= {:?}", deseralied_edge1);
 
-        let _jsoncanvas_deserialized: JsonCanvas = JsonCanvas::from_string(serialized_canvas);
+        let _jsoncanvas_deserialized: JsonCanvas = JsonCanvas::from_str(&serialized_canvas).unwrap();
 
     }
 }

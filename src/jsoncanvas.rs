@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::str::FromStr;
 
 use crate::node::GenericNodeInfo;
 use crate::node::Node;
@@ -12,6 +13,7 @@ use serde::{Serialize, Serializer, Deserialize, Deserializer};
 pub enum JsonCanvasError {
     AlreadyExists,
     NodeNotExists,
+    ParseError
 }
 
 
@@ -22,10 +24,10 @@ pub enum JsonCanvasError {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct JsonCanvas {
     #[serde(serialize_with = "serialize_as_vec_node", deserialize_with = "deserialize_as_map_node")]
-    #[serde(skip_serializing_if = "HashMap::is_empty")]
+    #[serde(skip_serializing_if = "HashMap::is_empty", default)]
     nodes: HashMap<NodeId, Node>,
     #[serde(serialize_with = "serialize_as_vec_edge", deserialize_with = "deserialize_as_map_edge")]
-    #[serde(skip_serializing_if = "HashMap::is_empty")]
+    #[serde(skip_serializing_if = "HashMap::is_empty", default)]
     edges: HashMap<EdgeId, Edge>
 }
 fn serialize_as_vec_node<S>(data: &HashMap<String, Node>, serializer: S) -> Result<S::Ok, S::Error>
@@ -125,8 +127,13 @@ impl JsonCanvas {
         serde_json::to_string(self).unwrap()
     }
 
-    /// Deserialize the JsonCanvas from a string
-    pub fn from_string(s: String) -> JsonCanvas {
-        serde_json::from_str(&s).unwrap()
+}
+
+
+impl FromStr for JsonCanvas {
+    type Err = JsonCanvasError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(serde_json::from_str(&s).unwrap())
     }
 }
