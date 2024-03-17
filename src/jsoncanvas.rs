@@ -102,6 +102,22 @@ impl JsonCanvas {
         self.edges.get_mut(&id)
     }
 
+    pub fn get_nodes(&self) -> &HashMap<NodeId, Node> {
+        &self.nodes
+    }
+
+    pub fn get_mut_nodes(&mut self) -> &mut HashMap<NodeId, Node> {
+        &mut self.nodes
+    }
+
+    pub fn get_edges(&self) -> &HashMap<EdgeId, Edge> {
+        &self.edges
+    }
+
+    pub fn get_mut_edges(&mut self) -> &mut HashMap<EdgeId, Edge> {
+        &mut self.edges
+    }
+
     /// Serialize the JsonCanvas to a string
     pub fn to_string(&self) -> String {
         serde_json::to_string(self).unwrap()
