@@ -96,10 +96,10 @@
 //! ```
 
 
-type NodeId = String;
-type EdgeId = String;
-type PixelCoordinate = i32;
-type PixelDimension = i32;
+pub type NodeId = String;
+pub type EdgeId = String;
+pub type PixelCoordinate = i64;
+pub type PixelDimension = u64;
 
 pub mod node;
 pub mod edge;
