@@ -22,8 +22,10 @@ pub enum JsonCanvasError {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct JsonCanvas {
     #[serde(serialize_with = "serialize_as_vec_node", deserialize_with = "deserialize_as_map_node")]
+    #[serde(skip_serializing_if = "HashMap::is_empty")]
     nodes: HashMap<NodeId, Node>,
     #[serde(serialize_with = "serialize_as_vec_edge", deserialize_with = "deserialize_as_map_edge")]
+    #[serde(skip_serializing_if = "HashMap::is_empty")]
     edges: HashMap<EdgeId, Edge>
 }
 fn serialize_as_vec_node<S>(data: &HashMap<String, Node>, serializer: S) -> Result<S::Ok, S::Error>
