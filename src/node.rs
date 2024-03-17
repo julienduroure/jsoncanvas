@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use ambassador::{delegatable_trait, Delegate};
+use std::path::PathBuf;
 use url::Url;
 use crate::color::Color;
 
@@ -123,7 +124,7 @@ impl Into<Node> for TextNode {
 pub struct FileNode {
     #[serde(flatten)]
     generic: GenericNode,
-    file: String,
+    file: PathBuf,
     #[serde(skip_serializing_if = "Option::is_none")]
     subpath: Option<String>,
 }
@@ -136,7 +137,7 @@ impl FileNode {
         width: i32,
         height: i32,
         color: Option<Color>,
-        file: String,
+        file: PathBuf,
         subpath: Option<String>,
     ) -> Self {
         Self {
@@ -146,7 +147,7 @@ impl FileNode {
         }
     }
 
-    pub fn file(&self) -> &str {
+    pub fn file(&self) -> &PathBuf {
         &self.file
     }
 

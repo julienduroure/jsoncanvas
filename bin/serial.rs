@@ -5,6 +5,7 @@ use jsoncanvas::edge::{Edge, End, Side};
 use serde_json;
 use url::Url;
 use hex_color::HexColor;
+use std::path::PathBuf;
 
 fn main() {
 
@@ -24,8 +25,8 @@ fn main() {
     let node1: Node = Node::Text(TextNode::new("id".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "This is a test".to_string()));
 
     // File Node
-    let node2: Node = Node::File(FileNode::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "dir/to/path/file.png".to_string(), None));
-    let node3: Node = Node::File(FileNode::new("id3".to_string(), 0, 0, 100, 100, Some(color1), "dir/to/path/file.png".to_string(), Some("#here".to_string())));
+    let node2: Node = Node::File(FileNode::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), PathBuf::from("dir/to/path/file.png"), None));
+    let node3: Node = Node::File(FileNode::new("id3".to_string(), 0, 0, 100, 100, Some(color1), PathBuf::from("dir/to/path/file.png"), Some("#here".to_string())));
 
     // Link Node
     let node4: Node = Node::Link(LinkNode::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), Url::parse("https://julienduroure.com").unwrap()));

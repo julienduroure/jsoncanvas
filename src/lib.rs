@@ -25,6 +25,7 @@
 //! use jsoncanvas::node::{Node, TextNode, FileNode, LinkNode, GroupNode, BackGround, BackgroundStyle};
 //! use jsoncanvas::edge::{Edge, End, Side};
 //! use hex_color::HexColor;
+//! use std::path::PathBuf;
 //!
 //!
 //!     // Color
@@ -39,8 +40,8 @@
 //!      let node1: Node = TextNode::new("id".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "This is a test".to_string()).into();
 //!
 //!        // File Node
-//!        let node2: Node = FileNode::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "dir/to/path/file.png".to_string(), None).into();
-//!        let node3: Node = FileNode::new("id3".to_string(), 0, 0, 100, 100, Some(color1), "dir/to/path/file.png".to_string(), Some("#here".to_string())).into();
+//!        let node2: Node = FileNode::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), PathBuf::from("dir/to/path/file.png"), None).into();
+//!        let node3: Node = FileNode::new("id3".to_string(), 0, 0, 100, 100, Some(color1), PathBuf::from("dir/to/path/file.png"), Some("#here".to_string())).into();
 //!
 //!        // Link Node
 //!        let node4: Node = LinkNode::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), Url::parse("https://julienduroure.com").unwrap()).into();
@@ -116,6 +117,7 @@ mod test {
         use super::color::{Color, PresetColor};
         use super::edge::{Edge, End, Side};
         use url::Url;
+        use std::path::PathBuf;
 
         // Color
         let color1 = Color::Preset(PresetColor::Red);
@@ -125,8 +127,8 @@ mod test {
         let node1: Node = TextNode::new("id".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "This is a test".to_string()).into();
 
         // File Node
-        let node2: Node = FileNode::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "dir/to/path/file.png".to_string(), None).into();
-        let node3: Node = FileNode::new("id3".to_string(), 0, 0, 100, 100, Some(color1), "dir/to/path/file.png".to_string(), Some("#here".to_string())).into();
+        let node2: Node = FileNode::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), PathBuf::from("dir/to/path/file.png"), None).into();
+        let node3: Node = FileNode::new("id3".to_string(), 0, 0, 100, 100, Some(color1), PathBuf::from("dir/to/path/file.png"), Some("#here".to_string())).into();
 
         // Link Node
         let node4: Node = LinkNode::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), Url::parse("https://julienduroure.com").unwrap()).into();
