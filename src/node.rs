@@ -214,8 +214,8 @@ pub struct GroupNode {
 impl GroupNode {
     pub fn new(
         id: String,
-        x: i32,
-        y: i32,
+        x: PixelCoordinate,
+        y: PixelCoordinate,
         width: PixelDimension,
         height: PixelDimension,
         color: Option<Color>,
