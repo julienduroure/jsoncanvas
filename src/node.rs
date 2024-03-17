@@ -85,6 +85,30 @@ pub enum Node {
     Group(GroupNode),
 }
 
+impl From<GroupNode> for Node {
+    fn from(node: GroupNode) -> Self {
+        Node::Group(node)
+    }
+}
+
+impl From<TextNode> for Node {
+    fn from(node: TextNode) -> Self {
+        Node::Text(node)
+    }
+}
+
+impl From<FileNode> for Node {
+    fn from(node: FileNode) -> Self {
+        Node::File(node)
+    }
+}
+
+impl From<LinkNode> for Node {
+    fn from(node: LinkNode) -> Self {
+        Node::Link(node)
+    }
+}
+
 #[derive(Debug, Delegate, Serialize, Deserialize)]
 #[delegate(GenericNodeInfo, target = "generic")]
 pub struct TextNode {
@@ -111,12 +135,6 @@ impl TextNode {
 
     pub fn text(&self) -> &str {
         &self.text
-    }
-}
-
-impl Into<Node> for TextNode {
-    fn into(self) -> Node {
-        Node::Text(self)
     }
 }
 
@@ -158,11 +176,6 @@ impl FileNode {
     }
 }
 
-impl Into<Node> for FileNode {
-    fn into(self) -> Node {
-        Node::File(self)
-    }
-}
 
 #[derive(Debug, Delegate, Serialize, Deserialize)]
 #[delegate(GenericNodeInfo, target = "generic")]
@@ -193,11 +206,6 @@ impl LinkNode {
     }
 }
 
-impl Into<Node> for LinkNode {
-    fn into(self) -> Node {
-        Node::Link(self)
-    }
-}
 
 #[derive(Debug, Delegate, Serialize, Deserialize)]
 #[delegate(GenericNodeInfo, target = "generic")]
@@ -239,11 +247,6 @@ impl GroupNode {
 }
 
 
-impl Into<Node> for GroupNode {
-    fn into(self) -> Node {
-        Node::Group(self)
-    }
-}
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
