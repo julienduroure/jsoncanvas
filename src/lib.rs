@@ -96,6 +96,11 @@
 //! ```
 
 
+type NodeId = String;
+type EdgeId = String;
+type PixelCoordinate = i32;
+type PixelDimension = i32;
+
 pub mod node;
 pub mod edge;
 pub mod color;

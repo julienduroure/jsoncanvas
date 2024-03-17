@@ -3,16 +3,18 @@ use ambassador::{delegatable_trait, Delegate};
 use std::path::PathBuf;
 use url::Url;
 use crate::color::Color;
+use crate::PixelCoordinate;
+use crate::PixelDimension;
 
 
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GenericNode {
     pub id: String,
-    x: i32,
-    y: i32,
-    width: i32,
-    height: i32,
+    x: PixelCoordinate,
+    y: PixelCoordinate,
+    width: PixelDimension,
+    height: PixelDimension,
     #[serde(skip_serializing_if = "Option::is_none")]
     color: Option<crate::color::Color>,
 }
@@ -20,10 +22,10 @@ pub struct GenericNode {
 impl GenericNode {
     pub fn new(
         id: String,
-        x: i32,
-        y: i32,
-        width: i32,
-        height: i32,
+        x: PixelCoordinate,
+        y: PixelCoordinate,
+        width: PixelDimension,
+        height: PixelDimension,
         color: Option<Color>,
     ) -> Self {
         Self {
@@ -40,10 +42,10 @@ impl GenericNode {
 #[delegatable_trait]
 pub trait GenericNodeInfo {
     fn id(&self) -> &String;
-    fn get_x(self) -> i32;
-    fn get_y(self) -> i32;
-    fn get_width(self) -> i32;
-    fn get_height(self) -> i32;
+    fn get_x(self) -> PixelCoordinate;
+    fn get_y(self) -> PixelCoordinate;
+    fn get_width(self) -> PixelDimension;
+    fn get_height(self) -> PixelDimension;
     fn color(&self) -> &Option<Color>;
 }
 
@@ -52,19 +54,19 @@ impl GenericNodeInfo for GenericNode {
         &self.id
     }
 
-    fn get_x(self) -> i32 {
+    fn get_x(self) -> PixelCoordinate {
         self.x
     }
 
-    fn get_y(self) -> i32 {
+    fn get_y(self) -> PixelCoordinate {
         self.y
     }
 
-    fn get_width(self) -> i32 {
+    fn get_width(self) -> PixelDimension {
         self.width
     }
 
-    fn get_height(self) -> i32 {
+    fn get_height(self) -> PixelDimension {
         self.height
     }
 
@@ -94,10 +96,10 @@ pub struct TextNode {
 impl TextNode {
     pub fn new(
         id: String,
-        x: i32,
-        y: i32,
-        width: i32,
-        height: i32,
+        x: PixelCoordinate,
+        y: PixelCoordinate,
+        width: PixelDimension,
+        height: PixelDimension,
         color: Option<Color>,
         text: String,
     ) -> Self {
@@ -132,10 +134,10 @@ pub struct FileNode {
 impl FileNode {
     pub fn new(
         id: String,
-        x: i32,
-        y: i32,
-        width: i32,
-        height: i32,
+        x: PixelCoordinate,
+        y: PixelCoordinate,
+        width: PixelDimension,
+        height: PixelDimension,
         color: Option<Color>,
         file: PathBuf,
         subpath: Option<String>,
@@ -173,10 +175,10 @@ pub struct LinkNode {
 impl LinkNode {
     pub fn new(
         id: String,
-        x: i32,
-        y: i32,
-        width: i32,
-        height: i32,
+        x: PixelCoordinate,
+        y: PixelCoordinate,
+        width: PixelDimension,
+        height: PixelDimension,
         color: Option<Color>,
         url: Url,
     ) -> Self {
@@ -214,8 +216,8 @@ impl GroupNode {
         id: String,
         x: i32,
         y: i32,
-        width: i32,
-        height: i32,
+        width: PixelDimension,
+        height: PixelDimension,
         color: Option<Color>,
         label: Option<String>,
         background: Option<BackGround>,

@@ -3,6 +3,8 @@ use std::collections::HashMap;
 use crate::node::GenericNodeInfo;
 use crate::node::Node;
 use crate::edge::Edge;
+use crate::NodeId;
+use crate::EdgeId;
 
 use serde::{Serialize, Serializer, Deserialize, Deserializer};
 
@@ -20,9 +22,9 @@ pub enum JsonCanvasError {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct JsonCanvas {
     #[serde(serialize_with = "serialize_as_vec_node", deserialize_with = "deserialize_as_map_node")]
-    nodes: HashMap<String, Node>,
+    nodes: HashMap<NodeId, Node>,
     #[serde(serialize_with = "serialize_as_vec_edge", deserialize_with = "deserialize_as_map_edge")]
-    edges: HashMap<String, Edge>
+    edges: HashMap<EdgeId, Edge>
 }
 fn serialize_as_vec_node<S>(data: &HashMap<String, Node>, serializer: S) -> Result<S::Ok, S::Error>
 where
@@ -92,11 +94,11 @@ impl JsonCanvas {
         Ok(())
     }
 
-    pub fn get_node(&mut self, id: String) -> Option<&mut Node> {
+    pub fn get_node(&mut self, id: NodeId) -> Option<&mut Node> {
         self.nodes.get_mut(&id)
     }
 
-    pub fn get_edge(&mut self, id: String) -> Option<&mut Edge> {
+    pub fn get_edge(&mut self, id: EdgeId) -> Option<&mut Edge> {
         self.edges.get_mut(&id)
     }
 
