@@ -246,13 +246,13 @@ impl Into<Node> for GroupNode {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BackGround {
-    image: String,
+    image: PathBuf,
     #[serde(skip_serializing_if = "Option::is_none")]
     background_style : Option<BackgroundStyle>
 }
 
 impl BackGround {
-    pub fn new(image: String, background_style: Option<BackgroundStyle>) -> BackGround {
+    pub fn new(image: PathBuf, background_style: Option<BackgroundStyle>) -> BackGround {
         BackGround {
             image,
             background_style,

@@ -49,8 +49,8 @@
 //!        // Group Node
 //!        let node5: Node = GroupNode::new("id5".to_string(), 0, 0, 100, 100, Some(color2), Some("Label".to_string()), None).into();
 //!        let node6: Node = GroupNode::new("id6".to_string(), 0, 0, 100, 100, None, None, None).into();
-//!        let node7: Node = GroupNode::new("id7".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new("path/to/image.png".to_string(), None))).into();
-//!        let node8: Node = GroupNode::new("id8".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new("path/to/image.png".to_string(), Some(BackgroundStyle::Cover)))).into();
+//!        let node7: Node = GroupNode::new("id7".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new(PathBuf::from("path/to/image.png"), None))).into();
+//!        let node8: Node = GroupNode::new("id8".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new(PathBuf::from("path/to/image.png"), Some(BackgroundStyle::Cover)))).into();
 //!
 //! // Edge
 //!
@@ -136,8 +136,8 @@ mod test {
         // Group Node
         let node5: Node = GroupNode::new("id5".to_string(), 0, 0, 100, 100, Some(color2), Some("Label".to_string()), None).into();
         let node6: Node = GroupNode::new("id6".to_string(), 0, 0, 100, 100, None, None, None).into();
-        let node7: Node = GroupNode::new("id7".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new("path/to/image.png".to_string(), None))).into();
-        let node8: Node = GroupNode::new("id8".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new("path/to/image.png".to_string(), Some(BackgroundStyle::Cover)))).into();
+        let node7: Node = GroupNode::new("id7".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new(PathBuf::from("path/to/image.png"), None))).into();
+        let node8: Node = GroupNode::new("id8".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new(PathBuf::from("path/to/image.png"), Some(BackgroundStyle::Cover)))).into();
 
         // Edge
 

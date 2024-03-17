@@ -34,8 +34,8 @@ fn main() {
     // Group Node
     let node5: Node = Node::Group(GroupNode::new("id5".to_string(), 0, 0, 100, 100, Some(color2), Some("Label".to_string()), None));
     let node6: Node = Node::Group(GroupNode::new("id6".to_string(), 0, 0, 100, 100, None, None, None));
-    let node7: Node = Node::Group(GroupNode::new("id7".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new("path/to/image.png".to_string(), None))));
-    let node8: Node = Node::Group(GroupNode::new("id8".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new("path/to/image.png".to_string(), Some(BackgroundStyle::Cover)))));
+    let node7: Node = Node::Group(GroupNode::new("id7".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new(PathBuf::from("path/to/image.png"), None))));
+    let node8: Node = Node::Group(GroupNode::new("id8".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new(PathBuf::from("path/to/image.png"), Some(BackgroundStyle::Cover)))));
 
     let serialized_node1: String = serde_json::to_string(&node1).unwrap();
     let serialized_node2 = serde_json::to_string(&node2).unwrap();
