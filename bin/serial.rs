@@ -6,7 +6,6 @@ use serde_json;
 use url::Url;
 use hex_color::HexColor;
 use std::path::PathBuf;
-use std::str::FromStr;
 
 fn main() {
 
@@ -73,7 +72,7 @@ fn main() {
 
     let empty_canvas = canvas.to_string();
     println!("empty canvas = {}", empty_canvas);
-    canvas =  JsonCanvas::from_str(&empty_canvas).unwrap();
+    canvas =  empty_canvas.parse().unwrap();
 
     canvas.add_node(node1).unwrap();
     canvas.add_node(node2).unwrap();
@@ -100,7 +99,7 @@ fn main() {
     // let deseralied_edge1: Edge = serde_json::from_str(&serialized_edge1).unwrap();
     // println!("deserialized edge 1= {:?}", deseralied_edge1);
 
-    let jsoncanvas_deserialized: jsoncanvas::jsoncanvas::JsonCanvas = JsonCanvas::from_str(&serialized_canvas).unwrap();
+    let jsoncanvas_deserialized: JsonCanvas = serialized_canvas.parse().unwrap();
     println!("deserialized canvas = {:?}", jsoncanvas_deserialized);
 
 }

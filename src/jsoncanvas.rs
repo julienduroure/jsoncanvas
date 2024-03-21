@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fmt::{Display, Formatter};
 use std::str::FromStr;
 
 use crate::node::GenericNodeInfo;
@@ -122,11 +123,6 @@ impl JsonCanvas {
         &mut self.edges
     }
 
-    /// Serialize the JsonCanvas to a string
-    pub fn to_string(&self) -> String {
-        serde_json::to_string(self).unwrap()
-    }
-
 }
 
 
@@ -135,5 +131,11 @@ impl FromStr for JsonCanvas {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(serde_json::from_str(&s).unwrap())
+    }
+}
+
+impl Display for JsonCanvas {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", serde_json::to_string(self).unwrap())
     }
 }
