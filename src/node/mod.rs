@@ -56,6 +56,8 @@ pub trait GenericNodeInfo {
     fn color(&self) -> &Option<Color>;
 }
 
+// This must come below the #[delegatable_trait] trait; see
+// https://github.com/hobofan/ambassador/issues/45#issuecomment-1901574140
 pub use ambassador_impl_GenericNodeInfo;
 
 impl GenericNodeInfo for GenericNode {
