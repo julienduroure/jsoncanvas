@@ -101,11 +101,11 @@ impl JsonCanvas {
         }
 
         if !self.nodes.contains_key(&edge.from_node) {
-            return Err(JsonCanvasError::NodeNotExists(edge.from_node));
+            return Err(JsonCanvasError::NodeNotExists(edge.from_node.clone()));
         }
 
         if !self.nodes.contains_key(&edge.to_node) {
-            return Err(JsonCanvasError::NodeNotExists(edge.from_node));
+            return Err(JsonCanvasError::NodeNotExists(edge.to_node.clone()));
         }
 
         self.edges.insert(edge.id.clone(), edge);
