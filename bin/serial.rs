@@ -1,14 +1,14 @@
-use jsoncanvas::color::{Color, PresetColor};
-use jsoncanvas::JsonCanvas;
-use jsoncanvas::node::{Node, BackGround, BackgroundStyle, FileNode, GroupNode, LinkNode, TextNode};
-use jsoncanvas::edge::{Edge, End, Side};
-use serde_json;
-use url::Url;
 use hex_color::HexColor;
+use jsoncanvas::color::{Color, PresetColor};
+use jsoncanvas::edge::{Edge, End, Side};
+use jsoncanvas::node::{
+    Background, BackgroundStyle, FileNode, GroupNode, LinkNode, Node, TextNode,
+};
+use jsoncanvas::JsonCanvas;
 use std::path::PathBuf;
+use url::Url;
 
 fn main() {
-
     ///////////////////////////// Serialization /////////////////////////////
 
     // Color
@@ -22,20 +22,93 @@ fn main() {
     println!("serialized2 = {}", serialized_color2);
 
     // Text Node
-    let node1: Node = Node::Text(TextNode::new("id".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), "This is a test".to_string()));
+    let node1: Node = Node::Text(TextNode::new(
+        "id".to_string(),
+        0,
+        0,
+        100,
+        100,
+        Some(Color::Preset(PresetColor::Red)),
+        "This is a test".to_string(),
+    ));
 
     // File Node
-    let node2: Node = Node::File(FileNode::new("id2".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), PathBuf::from("dir/to/path/file.png"), None));
-    let node3: Node = Node::File(FileNode::new("id3".to_string(), 0, 0, 100, 100, Some(color1), PathBuf::from("dir/to/path/file.png"), Some("#here".to_string())));
+    let node2: Node = Node::File(FileNode::new(
+        "id2".to_string(),
+        0,
+        0,
+        100,
+        100,
+        Some(Color::Preset(PresetColor::Red)),
+        PathBuf::from("dir/to/path/file.png"),
+        None,
+    ));
+    let node3: Node = Node::File(FileNode::new(
+        "id3".to_string(),
+        0,
+        0,
+        100,
+        100,
+        Some(color1),
+        PathBuf::from("dir/to/path/file.png"),
+        Some("#here".to_string()),
+    ));
 
     // Link Node
-    let node4: Node = Node::Link(LinkNode::new("id4".to_string(), 0, 0, 100, 100, Some(Color::Preset(PresetColor::Red)), Url::parse("https://julienduroure.com").unwrap()));
+    let node4: Node = Node::Link(LinkNode::new(
+        "id4".to_string(),
+        0,
+        0,
+        100,
+        100,
+        Some(Color::Preset(PresetColor::Red)),
+        Url::parse("https://julienduroure.com").unwrap(),
+    ));
 
     // Group Node
-    let node5: Node = Node::Group(GroupNode::new("id5".to_string(), 0, 0, 100, 100, Some(color2), Some("Label".to_string()), None));
-    let node6: Node = Node::Group(GroupNode::new("id6".to_string(), 0, 0, 100, 100, None, None, None));
-    let node7: Node = Node::Group(GroupNode::new("id7".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new(PathBuf::from("path/to/image.png"), None))));
-    let node8: Node = Node::Group(GroupNode::new("id8".to_string(), 0, 0, 100, 100, None, None, Some(BackGround::new(PathBuf::from("path/to/image.png"), Some(BackgroundStyle::Cover)))));
+    let node5: Node = Node::Group(GroupNode::new(
+        "id5".to_string(),
+        0,
+        0,
+        100,
+        100,
+        Some(color2),
+        Some("Label".to_string()),
+        None,
+    ));
+    let node6: Node = Node::Group(GroupNode::new(
+        "id6".to_string(),
+        0,
+        0,
+        100,
+        100,
+        None,
+        None,
+        None,
+    ));
+    let node7: Node = Node::Group(GroupNode::new(
+        "id7".to_string(),
+        0,
+        0,
+        100,
+        100,
+        None,
+        None,
+        Some(Background::new(PathBuf::from("path/to/image.png"), None)),
+    ));
+    let node8: Node = Node::Group(GroupNode::new(
+        "id8".to_string(),
+        0,
+        0,
+        100,
+        100,
+        None,
+        None,
+        Some(Background::new(
+            PathBuf::from("path/to/image.png"),
+            Some(BackgroundStyle::Cover),
+        )),
+    ));
 
     let serialized_node1: String = serde_json::to_string(&node1).unwrap();
     let serialized_node2 = serde_json::to_string(&node2).unwrap();
@@ -55,11 +128,30 @@ fn main() {
     println!("serialized node 7= {}", serialized_node7);
     println!("serialized node 8= {}", serialized_node8);
 
-
     // Edge
 
-    let edge1 = Edge::new("edge1".to_string(), "id".to_string(), None, None, "id2".to_string(), Some(Side::Left), Some(End::Arrow), None, None);
-    let edge2 = Edge::new("edge2".to_string(), "id3".to_string(), None, None, "id4".to_string(), Some(Side::Left), Some(End::Arrow), Some(Color::Preset(PresetColor::Cyan)), Some("edge label".to_string()));
+    let edge1 = Edge::new(
+        "edge1".to_string(),
+        "id".to_string(),
+        None,
+        None,
+        "id2".to_string(),
+        Some(Side::Left),
+        Some(End::Arrow),
+        None,
+        None,
+    );
+    let edge2 = Edge::new(
+        "edge2".to_string(),
+        "id3".to_string(),
+        None,
+        None,
+        "id4".to_string(),
+        Some(Side::Left),
+        Some(End::Arrow),
+        Some(Color::Preset(PresetColor::Cyan)),
+        Some("edge label".to_string()),
+    );
 
     let serialized_edge1 = serde_json::to_string(&edge1).unwrap();
     let serialized_edge2 = serde_json::to_string(&edge2).unwrap();
@@ -68,11 +160,11 @@ fn main() {
     println!("serialized edge 2= {}", serialized_edge2);
 
     // JSON Canvas
-    let mut canvas = JsonCanvas::new();
+    let mut canvas = JsonCanvas::default();
 
     let empty_canvas = canvas.to_string();
     println!("empty canvas = {}", empty_canvas);
-    canvas =  empty_canvas.parse().unwrap();
+    canvas = empty_canvas.parse().unwrap();
 
     canvas.add_node(node1).unwrap();
     canvas.add_node(node2).unwrap();
@@ -90,7 +182,6 @@ fn main() {
 
     println!("serialized canvas = {}", serialized_canvas);
 
-
     ///////////////////////////// Deserialization /////////////////////////////
 
     // let deserialized_node1: Node = serde_json::from_str(&serialized_node1).unwrap();
@@ -101,12 +192,4 @@ fn main() {
 
     let jsoncanvas_deserialized: JsonCanvas = serialized_canvas.parse().unwrap();
     println!("deserialized canvas = {:?}", jsoncanvas_deserialized);
-
 }
-
-
-
-
-
-
-

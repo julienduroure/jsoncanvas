@@ -16,6 +16,7 @@ serde_with = "3.7"
 url = { version = "2.5.0", features = ["serde"]}
 hex_color = { version = "3.0.0", features = ["serde"] }
 ambassador = "0.3.6"
+thiserror = "1.0.58"
 
 [[bin]]
 name = "serial"

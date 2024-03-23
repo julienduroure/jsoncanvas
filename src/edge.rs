@@ -21,7 +21,18 @@ pub struct Edge {
 }
 
 impl Edge {
-    pub fn new(id: String, from_node: String, from_side: Option<Side>, from_end: Option<End>, to_node: String, to_side: Option<Side>, to_end: Option<End>, color: Option<crate::color::Color>, label: Option<String>) -> Edge {
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        id: String,
+        from_node: String,
+        from_side: Option<Side>,
+        from_end: Option<End>,
+        to_node: String,
+        to_side: Option<Side>,
+        to_end: Option<End>,
+        color: Option<crate::color::Color>,
+        label: Option<String>,
+    ) -> Edge {
         Edge {
             id,
             from_node,
@@ -33,6 +44,10 @@ impl Edge {
             color,
             label,
         }
+    }
+
+    pub fn id(&self) -> &str {
+        &self.id
     }
 
     pub fn set_color(&mut self, color: crate::color::Color) {
@@ -74,7 +89,6 @@ impl Edge {
         self.to_side = None;
         self.to_end = None;
     }
-
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -90,5 +104,5 @@ pub enum Side {
 #[serde(rename_all = "camelCase")]
 pub enum End {
     None,
-    Arrow
+    Arrow,
 }
