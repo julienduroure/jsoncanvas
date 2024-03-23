@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use ambassador::Delegate;
 use serde::{Deserialize, Serialize};
 
+use crate::NodeId;
 use crate::{color::Color, PixelCoordinate, PixelDimension};
 
 use super::ambassador_impl_GenericNodeInfo;
@@ -23,7 +24,7 @@ pub struct GroupNode {
 impl GroupNode {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        id: String,
+        id: NodeId,
         x: PixelCoordinate,
         y: PixelCoordinate,
         width: PixelDimension,

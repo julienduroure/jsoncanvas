@@ -3,6 +3,7 @@ use std::fmt::{Display, Formatter};
 use std::str::FromStr;
 
 use crate::edge::Edge;
+use crate::id::EmptyId;
 use crate::node::GenericNodeInfo;
 use crate::node::Node;
 use crate::EdgeId;
@@ -22,6 +23,8 @@ pub enum JsonCanvasError {
     NodeNotExists(NodeId),
     #[error(transparent)]
     ParseError(#[from] serde_json::Error),
+    #[error(transparent)]
+    EmptyId(#[from] EmptyId),
 }
 
 /// JsonCanvas
@@ -43,7 +46,7 @@ pub struct JsonCanvas {
     #[serde(skip_serializing_if = "HashMap::is_empty", default)]
     edges: HashMap<EdgeId, Edge>,
 }
-fn serialize_as_vec_node<S>(data: &HashMap<String, Node>, serializer: S) -> Result<S::Ok, S::Error>
+fn serialize_as_vec_node<S>(data: &HashMap<NodeId, Node>, serializer: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
 {
@@ -51,19 +54,19 @@ where
     vec.serialize(serializer)
 }
 
-fn deserialize_as_map_node<'de, D>(deserializer: D) -> Result<HashMap<String, Node>, D::Error>
+fn deserialize_as_map_node<'de, D>(deserializer: D) -> Result<HashMap<NodeId, Node>, D::Error>
 where
     D: Deserializer<'de>,
 {
     let vec: Vec<Node> = Vec::deserialize(deserializer)?;
-    let map: HashMap<String, Node> = vec
+    let map: HashMap<_, _> = vec
         .into_iter()
-        .map(|node| (node.id().to_string(), node))
+        .map(|node| (node.id().clone(), node))
         .collect();
     Ok(map)
 }
 
-fn serialize_as_vec_edge<S>(data: &HashMap<String, Edge>, serializer: S) -> Result<S::Ok, S::Error>
+fn serialize_as_vec_edge<S>(data: &HashMap<EdgeId, Edge>, serializer: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
 {
@@ -71,12 +74,12 @@ where
     vec.serialize(serializer)
 }
 
-fn deserialize_as_map_edge<'de, D>(deserializer: D) -> Result<HashMap<String, Edge>, D::Error>
+fn deserialize_as_map_edge<'de, D>(deserializer: D) -> Result<HashMap<EdgeId, Edge>, D::Error>
 where
     D: Deserializer<'de>,
 {
     let vec: Vec<Edge> = Vec::deserialize(deserializer)?;
-    let map: HashMap<String, Edge> = vec
+    let map: HashMap<_, _> = vec
         .into_iter()
         .map(|node| (node.id.clone(), node))
         .collect();
@@ -86,15 +89,15 @@ where
 impl JsonCanvas {
     pub fn add_node(&mut self, node: Node) -> Result<(), JsonCanvasError> {
         if self.nodes.contains_key(node.id()) {
-            return Err(JsonCanvasError::NodeExists(node.id().to_string()));
+            return Err(JsonCanvasError::NodeExists(node.id().clone()));
         }
-        self.nodes.insert(node.id().to_string(), node);
+        self.nodes.insert(node.id().clone(), node);
         Ok(())
     }
 
     pub fn add_edge(&mut self, edge: Edge) -> Result<(), JsonCanvasError> {
         if self.edges.contains_key(&edge.id) {
-            return Err(JsonCanvasError::EdgeExists(edge.id().to_string()));
+            return Err(JsonCanvasError::EdgeExists(edge.id().clone()));
         }
 
         if !self.nodes.contains_key(&edge.from_node) {

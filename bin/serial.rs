@@ -23,7 +23,7 @@ fn main() {
 
     // Text Node
     let node1: Node = Node::Text(TextNode::new(
-        "id".to_string(),
+        "id".parse().unwrap(),
         0,
         0,
         100,
@@ -34,7 +34,7 @@ fn main() {
 
     // File Node
     let node2: Node = Node::File(FileNode::new(
-        "id2".to_string(),
+        "id2".parse().unwrap(),
         0,
         0,
         100,
@@ -44,19 +44,19 @@ fn main() {
         None,
     ));
     let node3: Node = Node::File(FileNode::new(
-        "id3".to_string(),
+        "id3".parse().unwrap(),
         0,
         0,
         100,
         100,
         Some(color1),
         PathBuf::from("dir/to/path/file.png"),
-        Some("#here".to_string()),
+        Some("#here".parse().unwrap()),
     ));
 
     // Link Node
     let node4: Node = Node::Link(LinkNode::new(
-        "id4".to_string(),
+        "id4".parse().unwrap(),
         0,
         0,
         100,
@@ -67,7 +67,7 @@ fn main() {
 
     // Group Node
     let node5: Node = Node::Group(GroupNode::new(
-        "id5".to_string(),
+        "id5".parse().unwrap(),
         0,
         0,
         100,
@@ -77,7 +77,7 @@ fn main() {
         None,
     ));
     let node6: Node = Node::Group(GroupNode::new(
-        "id6".to_string(),
+        "id6".parse().unwrap(),
         0,
         0,
         100,
@@ -87,7 +87,7 @@ fn main() {
         None,
     ));
     let node7: Node = Node::Group(GroupNode::new(
-        "id7".to_string(),
+        "id7".parse().unwrap(),
         0,
         0,
         100,
@@ -97,7 +97,7 @@ fn main() {
         Some(Background::new(PathBuf::from("path/to/image.png"), None)),
     ));
     let node8: Node = Node::Group(GroupNode::new(
-        "id8".to_string(),
+        "id8".parse().unwrap(),
         0,
         0,
         100,
@@ -131,22 +131,22 @@ fn main() {
     // Edge
 
     let edge1 = Edge::new(
-        "edge1".to_string(),
-        "id".to_string(),
+        "edge1".parse().unwrap(),
+        "id".parse().unwrap(),
         None,
         None,
-        "id2".to_string(),
+        "id2".parse().unwrap(),
         Some(Side::Left),
         Some(End::Arrow),
         None,
         None,
     );
     let edge2 = Edge::new(
-        "edge2".to_string(),
-        "id3".to_string(),
+        "edge2".parse().unwrap(),
+        "id3".parse().unwrap(),
         None,
         None,
-        "id4".to_string(),
+        "id4".parse().unwrap(),
         Some(Side::Left),
         Some(End::Arrow),
         Some(Color::Preset(PresetColor::Cyan)),

@@ -90,16 +90,18 @@
 //! use jsoncanvas::edge::{Edge, End, Side};
 //! ```
 
-pub type NodeId = String;
-pub type EdgeId = String;
+// pub type NodeId = String;
+// pub type EdgeId = String;
 pub type PixelCoordinate = i64;
 pub type PixelDimension = u64;
 
 pub mod color;
 pub mod edge;
+mod id;
 pub mod jsoncanvas;
 pub mod node;
 
+pub use id::{EdgeId, NodeId};
 pub use jsoncanvas::JsonCanvas;
 pub use jsoncanvas::JsonCanvasError;
 pub use node::{Background, BackgroundStyle, FileNode, GroupNode, LinkNode, Node, TextNode};
@@ -125,7 +127,7 @@ mod test {
 
         // Text Node
         let node1: Node = TextNode::new(
-            "id".to_string(),
+            "id".parse().unwrap(),
             0,
             0,
             100,
@@ -137,7 +139,7 @@ mod test {
 
         // File Node
         let node2: Node = FileNode::new(
-            "id2".to_string(),
+            "id2".parse().unwrap(),
             0,
             0,
             100,
@@ -148,7 +150,7 @@ mod test {
         )
         .into();
         let node3: Node = FileNode::new(
-            "id3".to_string(),
+            "id3".parse().unwrap(),
             0,
             0,
             100,
@@ -161,7 +163,7 @@ mod test {
 
         // Link Node
         let node4: Node = LinkNode::new(
-            "id4".to_string(),
+            "id4".parse().unwrap(),
             0,
             0,
             100,
@@ -173,7 +175,7 @@ mod test {
 
         // Group Node
         let node5: Node = GroupNode::new(
-            "id5".to_string(),
+            "id5".parse().unwrap(),
             0,
             0,
             100,
@@ -184,9 +186,9 @@ mod test {
         )
         .into();
         let node6: Node =
-            GroupNode::new("id6".to_string(), 0, 0, 100, 100, None, None, None).into();
+            GroupNode::new("id6".parse().unwrap(), 0, 0, 100, 100, None, None, None).into();
         let node7: Node = GroupNode::new(
-            "id7".to_string(),
+            "id7".parse().unwrap(),
             0,
             0,
             100,
@@ -197,7 +199,7 @@ mod test {
         )
         .into();
         let node8: Node = GroupNode::new(
-            "id8".to_string(),
+            "id8".parse().unwrap(),
             0,
             0,
             100,
@@ -214,22 +216,22 @@ mod test {
         // Edge
 
         let edge1 = Edge::new(
-            "edge1".to_string(),
-            "id".to_string(),
+            "edge1".parse().unwrap(),
+            "id".parse().unwrap(),
             None,
             None,
-            "id2".to_string(),
+            "id2".parse().unwrap(),
             Some(Side::Left),
             Some(End::Arrow),
             None,
             None,
         );
         let edge2 = Edge::new(
-            "edge2".to_string(),
-            "id3".to_string(),
+            "edge2".parse().unwrap(),
+            "id3".parse().unwrap(),
             None,
             None,
-            "id4".to_string(),
+            "id4".parse().unwrap(),
             Some(Side::Left),
             Some(End::Arrow),
             Some(Color::Preset(PresetColor::Cyan)),

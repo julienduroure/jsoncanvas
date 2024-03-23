@@ -17,7 +17,7 @@ pub use text::TextNode;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GenericNode {
-    pub id: String,
+    pub id: NodeId,
     x: PixelCoordinate,
     y: PixelCoordinate,
     width: PixelDimension,
@@ -28,7 +28,7 @@ pub struct GenericNode {
 
 impl GenericNode {
     pub fn new(
-        id: String,
+        id: NodeId,
         x: PixelCoordinate,
         y: PixelCoordinate,
         width: PixelDimension,
@@ -48,7 +48,7 @@ impl GenericNode {
 
 #[delegatable_trait]
 pub trait GenericNodeInfo {
-    fn id(&self) -> &crate::NodeId;
+    fn id(&self) -> &NodeId;
     fn get_x(&self) -> PixelCoordinate;
     fn get_y(&self) -> PixelCoordinate;
     fn get_width(&self) -> PixelDimension;

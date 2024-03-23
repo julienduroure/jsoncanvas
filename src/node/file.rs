@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use crate::NodeId;
 use crate::{color::Color, PixelCoordinate, PixelDimension};
 
 use super::ambassador_impl_GenericNodeInfo;
@@ -20,7 +21,7 @@ pub struct FileNode {
 impl FileNode {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        id: String,
+        id: NodeId,
         x: PixelCoordinate,
         y: PixelCoordinate,
         width: PixelDimension,
