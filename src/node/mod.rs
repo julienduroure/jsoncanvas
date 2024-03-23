@@ -1,4 +1,5 @@
 use crate::color::Color;
+use crate::NodeId;
 use crate::PixelCoordinate;
 use crate::PixelDimension;
 use ambassador::{delegatable_trait, Delegate};
@@ -47,7 +48,7 @@ impl GenericNode {
 
 #[delegatable_trait]
 pub trait GenericNodeInfo {
-    fn id(&self) -> &str;
+    fn id(&self) -> &crate::NodeId;
     fn get_x(&self) -> PixelCoordinate;
     fn get_y(&self) -> PixelCoordinate;
     fn get_width(&self) -> PixelDimension;
@@ -58,7 +59,7 @@ pub trait GenericNodeInfo {
 pub use ambassador_impl_GenericNodeInfo;
 
 impl GenericNodeInfo for GenericNode {
-    fn id(&self) -> &str {
+    fn id(&self) -> &NodeId {
         &self.id
     }
 

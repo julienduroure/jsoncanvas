@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::EdgeId;
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Edge {
@@ -46,7 +48,7 @@ impl Edge {
         }
     }
 
-    pub fn id(&self) -> &str {
+    pub fn id(&self) -> &EdgeId {
         &self.id
     }
 
