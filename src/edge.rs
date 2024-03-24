@@ -1,15 +1,17 @@
 use serde::{Deserialize, Serialize};
 
+use crate::{color::Color, EdgeId, NodeId};
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Edge {
-    pub id: String,
-    pub from_node: String,
+    pub id: EdgeId,
+    pub from_node: NodeId,
     #[serde(skip_serializing_if = "Option::is_none")]
     from_side: Option<Side>,
     #[serde(skip_serializing_if = "Option::is_none")]
     from_end: Option<End>,
-    pub to_node: String,
+    pub to_node: NodeId,
     #[serde(skip_serializing_if = "Option::is_none")]
     to_side: Option<Side>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -20,8 +22,21 @@ pub struct Edge {
     label: Option<String>,
 }
 
+pub type Terminus = (NodeId, Option<Side>, Option<End>);
+
 impl Edge {
-    pub fn new(id: String, from_node: String, from_side: Option<Side>, from_end: Option<End>, to_node: String, to_side: Option<Side>, to_end: Option<End>, color: Option<crate::color::Color>, label: Option<String>) -> Edge {
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        id: EdgeId,
+        from_node: NodeId,
+        from_side: Option<Side>,
+        from_end: Option<End>,
+        to_node: NodeId,
+        to_side: Option<Side>,
+        to_end: Option<End>,
+        color: Option<crate::color::Color>,
+        label: Option<String>,
+    ) -> Edge {
         Edge {
             id,
             from_node,
@@ -35,46 +50,43 @@ impl Edge {
         }
     }
 
-    pub fn set_color(&mut self, color: crate::color::Color) {
+    pub fn id(&self) -> &EdgeId {
+        &self.id
+    }
+
+    pub fn set_color(&mut self, color: Color) -> &mut Self {
         self.color = Some(color);
+        self
     }
 
-    pub fn remove_color(&mut self) {
-        self.color = None;
+    pub fn remove_color(&mut self) -> Option<Color> {
+        std::mem::take(&mut self.color)
     }
 
-    pub fn set_label(&mut self, label: String) {
+    pub fn set_label(&mut self, label: String) -> &mut Self {
         self.label = Some(label);
+        self
     }
 
-    pub fn remove_label(&mut self) {
-        self.label = None;
+    pub fn remove_label(&mut self) -> Option<String> {
+        std::mem::take(&mut self.label)
     }
 
-    pub fn set_from(&mut self, from_node: String, from_side: Option<Side>, from_end: Option<End>) {
-        self.from_node = from_node;
-        self.from_side = from_side;
-        self.from_end = from_end;
+    pub fn set_from(&mut self, node: NodeId, side: Option<Side>, end: Option<End>) -> Terminus {
+        (
+            std::mem::replace(&mut self.from_node, node),
+            std::mem::replace(&mut self.from_side, side),
+            std::mem::replace(&mut self.from_end, end),
+        )
     }
 
-    pub fn set_to(&mut self, to_node: String, to_side: Option<Side>, to_end: Option<End>) {
-        self.to_node = to_node;
-        self.to_side = to_side;
-        self.to_end = to_end;
+    pub fn set_to(&mut self, node: NodeId, side: Option<Side>, end: Option<End>) -> Terminus {
+        (
+            std::mem::replace(&mut self.to_node, node),
+            std::mem::replace(&mut self.to_side, side),
+            std::mem::replace(&mut self.to_end, end),
+        )
     }
-
-    pub fn remove_from(&mut self) {
-        self.from_node = "".to_string();
-        self.from_side = None;
-        self.from_end = None;
-    }
-
-    pub fn remove_to(&mut self) {
-        self.to_node = "".to_string();
-        self.to_side = None;
-        self.to_end = None;
-    }
-
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -90,5 +102,5 @@ pub enum Side {
 #[serde(rename_all = "camelCase")]
 pub enum End {
     None,
-    Arrow
+    Arrow,
 }
