@@ -283,7 +283,7 @@ dependencies = [
 
 [[package]]
 name = "jsoncanvas"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "ambassador",
  "hex_color",
