@@ -21,7 +21,3 @@ thiserror = "1.0.58"
 [[bin]]
 name = "serial"
 path = "bin/serial.rs"
-
-[[bin]]
-name = "testing"
-path = "bin/testing.rs"
