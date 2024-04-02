@@ -1,5 +1,5 @@
 use hex_color::HexColor;
-use jsoncanvas::color::{Color, PresetColor};
+use jsoncanvas::color::Color;
 use jsoncanvas::edge::{Edge, End, Side};
 use jsoncanvas::node::{
     Background, BackgroundStyle, FileNode, GroupNode, LinkNode, Node, TextNode,
@@ -12,7 +12,7 @@ fn main() {
     ///////////////////////////// Serialization /////////////////////////////
 
     // Color
-    let color1 = Color::Preset(PresetColor::Red);
+    let color1 = Color::Preset("red".to_string());
     let color2 = Color::Color(HexColor::parse("#ff0000").unwrap());
 
     let serialized_color1 = serde_json::to_string(&color1).unwrap();
@@ -28,7 +28,7 @@ fn main() {
         0,
         100,
         100,
-        Some(Color::Preset(PresetColor::Red)),
+        Some(Color::Preset("red".to_string())),
         "This is a test".to_string(),
     ));
 
@@ -39,7 +39,7 @@ fn main() {
         0,
         100,
         100,
-        Some(Color::Preset(PresetColor::Red)),
+        Some(Color::Preset("red".to_string())),
         PathBuf::from("dir/to/path/file.png"),
         None,
     ));
@@ -61,7 +61,7 @@ fn main() {
         0,
         100,
         100,
-        Some(Color::Preset(PresetColor::Red)),
+        Some(Color::Preset("red".to_string())),
         Url::parse("https://julienduroure.com").unwrap(),
     ));
 
@@ -149,7 +149,7 @@ fn main() {
         "id4".parse().unwrap(),
         Some(Side::Left),
         Some(End::Arrow),
-        Some(Color::Preset(PresetColor::Cyan)),
+        Some(Color::Preset("cyan".to_string())),
         Some("edge label".to_string()),
     );
 

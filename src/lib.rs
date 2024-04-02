@@ -18,7 +18,7 @@
 //!
 //! ```
 //!    use hex_color::HexColor;
-//!    use jsoncanvas::color::{Color, PresetColor};
+//!    use jsoncanvas::color::Color;
 //!    use jsoncanvas::edge::{Edge, End, Side};
 //!    use jsoncanvas::node::{
 //!        Background, BackgroundStyle, FileNode, GroupNode, LinkNode, Node, TextNode,
@@ -28,7 +28,7 @@
 //!    use url::Url;
 //!
 //!    // Color
-//!    let color1 = Color::Preset(PresetColor::Red);
+//!    let color1 = Color::Preset("red".to_string());
 //!    let color2 = Color::Color(HexColor::parse("#ff0000").unwrap());
 //!
 //!    let serialized_color1 = serde_json::to_string(&color1).unwrap();
@@ -44,7 +44,7 @@
 //!        0,
 //!        100,
 //!        100,
-//!        Some(Color::Preset(PresetColor::Red)),
+//!        Some(Color::Preset("red".to_string())),
 //!        "This is a test".to_string(),
 //!    ));
 //!
@@ -55,7 +55,7 @@
 //!        0,
 //!        100,
 //!        100,
-//!        Some(Color::Preset(PresetColor::Red)),
+//!        Some(Color::Preset("red".to_string())),
 //!        PathBuf::from("dir/to/path/file.png"),
 //!        None,
 //!    ));
@@ -77,7 +77,7 @@
 //!        0,
 //!        100,
 //!        100,
-//!        Some(Color::Preset(PresetColor::Red)),
+//!        Some(Color::Preset("red".to_string())),
 //!        Url::parse("https://julienduroure.com").unwrap(),
 //!    ));
 //!
@@ -165,7 +165,7 @@
 //!        "id4".parse().unwrap(),
 //!        Some(Side::Left),
 //!        Some(End::Arrow),
-//!        Some(Color::Preset(PresetColor::Cyan)),
+//!        Some(Color::Preset("cyan".to_string())),
 //!        Some("edge label".to_string()),
 //!    );
 //!
@@ -206,7 +206,7 @@
 //!
 //! ```
 //! use hex_color::HexColor;
-//! use jsoncanvas::color::{Color, PresetColor};
+//! use jsoncanvas::color::Color;
 //! use jsoncanvas::edge::{Edge, End, Side};
 //! use jsoncanvas::node::{
 //!     Background, BackgroundStyle, FileNode, GroupNode, LinkNode, Node, TextNode,
@@ -238,7 +238,7 @@ mod test {
 
     #[test]
     fn test() {
-        use super::color::{Color, PresetColor};
+        use super::color::Color;
         use super::edge::{Edge, End, Side};
         use super::jsoncanvas::JsonCanvas;
         use super::node::{
@@ -248,7 +248,7 @@ mod test {
         use url::Url;
 
         // Color
-        let color1 = Color::Preset(PresetColor::Red);
+        let color1 = Color::Preset("red".to_string());
         let color2 = Color::Color(HexColor::parse("#ff0000").unwrap());
 
         // Text Node
@@ -258,7 +258,7 @@ mod test {
             0,
             100,
             100,
-            Some(Color::Preset(PresetColor::Red)),
+            Some(Color::Preset("red".to_string())),
             "This is a test".to_string(),
         )
         .into();
@@ -270,7 +270,7 @@ mod test {
             0,
             100,
             100,
-            Some(Color::Preset(PresetColor::Red)),
+            Some(Color::Preset("red".to_string())),
             PathBuf::from("dir/to/path/file.png"),
             None,
         )
@@ -294,7 +294,7 @@ mod test {
             0,
             100,
             100,
-            Some(Color::Preset(PresetColor::Red)),
+            Some(Color::Preset("red".to_string())),
             Url::parse("https://julienduroure.com").unwrap(),
         )
         .into();
@@ -360,7 +360,7 @@ mod test {
             "id4".parse().unwrap(),
             Some(Side::Left),
             Some(End::Arrow),
-            Some(Color::Preset(PresetColor::Cyan)),
+            Some(Color::Preset("cyan".to_string())),
             Some("edge label".to_string()),
         );
 
