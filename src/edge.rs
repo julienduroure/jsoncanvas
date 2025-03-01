@@ -54,6 +54,38 @@ impl Edge {
         &self.id
     }
 
+    pub fn from_node(&self) -> &NodeId {
+        &self.from_node
+    }
+
+    pub fn from_side(&self) -> Option<&Side> {
+        self.from_side.as_ref()
+    }
+
+    pub fn from_end(&self) -> Option<&End> {
+        self.from_end.as_ref()
+    }
+
+    pub fn to_node(&self) -> &NodeId {
+        &self.to_node
+    }
+
+    pub fn to_side(&self) -> Option<&Side> {
+        self.to_side.as_ref()
+    }
+
+    pub fn to_end(&self) -> Option<&End> {
+        self.to_end.as_ref()
+    }
+
+    pub fn color(&self) -> Option<&Color> {
+        self.color.as_ref()
+    }
+
+    pub fn label(&self) -> Option<&String> {
+        self.label.as_ref()
+    }
+
     pub fn set_color(&mut self, color: Color) -> &mut Self {
         self.color = Some(color);
         self

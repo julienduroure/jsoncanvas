@@ -81,7 +81,7 @@ where
     let vec: Vec<Edge> = Vec::deserialize(deserializer)?;
     let map: HashMap<_, _> = vec
         .into_iter()
-        .map(|node| (node.id.clone(), node))
+        .map(|node| (node.id().clone(), node))
         .collect();
     Ok(map)
 }
@@ -96,19 +96,19 @@ impl JsonCanvas {
     }
 
     pub fn add_edge(&mut self, edge: Edge) -> Result<(), JsonCanvasError> {
-        if self.edges.contains_key(&edge.id) {
+        if self.edges.contains_key(edge.id()) {
             return Err(JsonCanvasError::EdgeExists(edge.id().clone()));
         }
 
-        if !self.nodes.contains_key(&edge.from_node) {
-            return Err(JsonCanvasError::NodeNotExists(edge.from_node.clone()));
+        if !self.nodes.contains_key(edge.from_node()) {
+            return Err(JsonCanvasError::NodeNotExists(edge.from_node().clone()));
         }
 
-        if !self.nodes.contains_key(&edge.to_node) {
-            return Err(JsonCanvasError::NodeNotExists(edge.to_node.clone()));
+        if !self.nodes.contains_key(edge.to_node()) {
+            return Err(JsonCanvasError::NodeNotExists(edge.to_node().clone()));
         }
 
-        self.edges.insert(edge.id.clone(), edge);
+        self.edges.insert(edge.id().clone(), edge);
         Ok(())
     }
 
