@@ -1,6 +1,6 @@
 [package]
 name = "jsoncanvas"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["Julien Duroure <julien.duroure@gmail.com>"]
 license = "MIT"
 edition = "2021"
